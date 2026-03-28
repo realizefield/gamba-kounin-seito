@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAMBA 高認コース — 江原予備校（令和8年度対応）</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0D1B2A; --navy2: #162032; --navy3: #1E2D40;
+  --gold: #D4A017; --gold2: #F0C040; --gold3: #FDD870;
+  --cream: #FBF5E6; --cream2: rgba(251,245,230,0.75); --cream3: rgba(251,245,230,0.4);
+  --red: #C0392B; --red2: #E74C3C;
+  --green: #1E8449; --green2: #27AE60; --green3: #58D68D;
+  --blue: #1A5276; --blue2: #2980B9; --blue3: #5DADE2;
+  --purple: #6C3483; --purple2: #AF7AC5;
+  --teal: #148F77; --teal2: #1ABC9C;
+  --orange: #CA6F1E; --orange2: #E67E22;
+  --gray: #7F8C8D; --cyan: #17A589;
+  --new-info: #0E6655; --new-info2: #1ABC9C;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Noto Sans JP',sans-serif;
+  background:var(--navy); color:var(--cream);
+  min-height:100vh; overflow-x:hidden;
+}
+
+/* BG */
+.bg-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.bg-grad{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 55% 40% at 5% 8%, rgba(212,160,23,0.12) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 40% at 92% 85%, rgba(26,82,118,0.14) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 40% at 80% 10%, rgba(26,188,156,0.07) 0%,transparent 50%),
+    linear-gradient(160deg,#0D1B2A 0%,#080F18 100%);
+}
+.bg-dots{position:absolute;inset:0;background-image:radial-gradient(rgba(212,160,23,0.06) 1px,transparent 1px);background-size:32px 32px;}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.01) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.01) 1px,transparent 1px);background-size:80px 80px;}
+
+/* LAYOUT */
+.app{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh;}
+
+/* HEADER */
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;height:60px;
+  background:rgba(13,27,42,0.9);backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(212,160,23,0.15);
+  position:sticky;top:0;z-index:300;
+}
+.logo{display:flex;align-items:center;gap:11px;cursor:pointer;}
+.logo-gem{
+  width:36px;height:36px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Noto Serif JP',serif;font-weight:900;font-size:14px;color:var(--navy);
+  box-shadow:0 0 16px rgba(212,160,23,0.3);
+}
+.logo-t .m{font-family:'Noto Serif JP',serif;font-weight:900;font-size:16px;letter-spacing:.04em;}
+.logo-t .s{font-size:9px;color:var(--gray);letter-spacing:.1em;}
+.logo-badge{padding:3px 10px;border-radius:12px;background:rgba(212,160,23,0.18);border:1px solid rgba(212,160,23,0.35);font-size:10px;color:var(--gold2);font-weight:700;letter-spacing:.06em;}
+.new-badge{padding:3px 10px;border-radius:12px;background:rgba(26,188,156,0.2);border:1px solid rgba(26,188,156,0.4);font-size:10px;color:var(--teal2);font-weight:700;letter-spacing:.06em;animation:pulse-new 2s ease-in-out infinite;}
+@keyframes pulse-new{0%,100%{box-shadow:0 0 0 0 rgba(26,188,156,0.3);}50%{box-shadow:0 0 0 6px rgba(26,188,156,0);}}
+.hdr-nav{display:flex;gap:2px;}
+.hn{padding:6px 12px;border:none;background:transparent;color:var(--gray);font-family:'Noto Sans JP',sans-serif;font-size:12px;cursor:pointer;border-radius:6px;transition:all .2s;}
+.hn:hover{background:rgba(255,255,255,0.07);color:var(--cream);}
+.hn.on{color:var(--gold2);}
+.hdr-r{display:flex;align-items:center;gap:10px;}
+.notif{position:relative;cursor:pointer;font-size:17px;}
+.nbadge{position:absolute;top:-3px;right:-3px;width:15px;height:15px;border-radius:50%;background:var(--red);font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;color:white;}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--blue2));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--navy);cursor:pointer;}
+
+/* MAIN */
+main{flex:1;display:flex;flex-direction:column;gap:22px;padding:26px 32px 48px;}
+
+/* ALERT BANNER */
+.alert-banner{
+  background:linear-gradient(120deg,rgba(26,188,156,0.18) 0%,rgba(13,27,42,0.95) 60%);
+  border:1px solid rgba(26,188,156,0.4);border-radius:14px;
+  padding:14px 22px;display:flex;align-items:center;gap:14px;
+  animation:slideDown .6s ease both;
+}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+.alert-icon{font-size:26px;flex-shrink:0;}
+.alert-text{}
+.alert-title{font-size:14px;font-weight:700;color:var(--teal2);margin-bottom:3px;}
+.alert-sub{font-size:12px;color:var(--cream2);line-height:1.6;}
+.alert-tag{
+  margin-left:auto;flex-shrink:0;
+  padding:5px 14px;border-radius:8px;
+  background:rgba(26,188,156,0.25);border:1px solid rgba(26,188,156,0.45);
+  font-size:11px;font-weight:700;color:var(--teal2);white-space:nowrap;
+}
+
+/* HERO */
+.hero{
+  background:linear-gradient(120deg,rgba(212,160,23,0.16) 0%,rgba(22,32,50,0.9) 55%,rgba(26,82,118,0.12) 100%);
+  border:1px solid rgba(212,160,23,0.22);border-radius:18px;padding:26px 34px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;overflow:hidden;animation:heroIn .7s ease both;
+}
+@keyframes heroIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+.hero::before{content:'高認';position:absolute;right:28px;top:50%;transform:translateY(-50%);font-family:'Noto Serif JP',serif;font-size:120px;font-weight:900;color:rgba(212,160,23,0.04);line-height:1;pointer-events:none;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:7px;padding:4px 12px;border-radius:20px;margin-bottom:9px;background:rgba(212,160,23,0.14);border:1px solid rgba(212,160,23,0.28);font-size:10px;color:var(--gold2);letter-spacing:.1em;text-transform:uppercase;}
+.hero h1{font-family:'Noto Serif JP',serif;font-size:24px;font-weight:900;line-height:1.3;margin-bottom:7px;}
+.hero h1 em{color:var(--gold2);font-style:normal;}
+.hero-sub{font-size:12px;color:var(--cream2);line-height:1.75;max-width:460px;}
+.hero-stats{display:flex;gap:26px;flex-shrink:0;}
+.hstat{text-align:center;}
+.hstat-num{font-family:'DM Mono',monospace;font-size:30px;font-weight:500;color:var(--gold2);line-height:1;text-shadow:0 0 20px rgba(212,160,23,0.4);}
+.hstat-label{font-size:10px;color:var(--gray);margin-top:4px;}
+
+/* GRID */
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.gmain{display:grid;grid-template-columns:1fr 330px;gap:20px;}
+
+/* CARD BASE */
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:19px;transition:all .3s;animation:cardUp .5s ease both;}
+.card:hover{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.13);transform:translateY(-2px);}
+@keyframes cardUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card:nth-child(1){animation-delay:.04s}.card:nth-child(2){animation-delay:.08s}.card:nth-child(3){animation-delay:.12s}.card:nth-child(4){animation-delay:.16s}
+.ctitle{font-size:11px;color:var(--gray);letter-spacing:.08em;display:flex;align-items:center;gap:6px;margin-bottom:13px;text-transform:uppercase;}
+.ctitle .dot{width:5px;height:5px;border-radius:50%;}
+.sec-head{font-family:'Noto Serif JP',serif;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:15px;}
+.sec-head::before{content:'';display:block;width:4px;height:19px;border-radius:2px;background:var(--gold);flex-shrink:0;}
+
+/* SUBJECTS */
+.subjects-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;}
+
+/* 令和8年新レイアウト：10科目対応 */
+.subjects-top-row{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:11px;}
+.subjects-mid-row{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:11px;}
+.subjects-bot-row{display:grid;grid-template-columns:1fr 4fr;gap:11px;}
+.sci-options{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+
+.subj{
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  border-radius:12px;padding:14px 12px;cursor:pointer;
+  transition:all .3s;position:relative;overflow:hidden;
+  animation:cardUp .5s ease both;
+}
+.subj::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sc);}
+.subj:hover{background:rgba(255,255,255,0.09);border-color:var(--sc);transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,0,0,0.4);}
+
+/* 情報科目 — 特別スタイル */
+.subj.info-new{
+  background:linear-gradient(135deg,rgba(26,188,156,0.1),rgba(13,27,42,0.9));
+  border:1px solid rgba(26,188,156,0.3);
+}
+.subj.info-new::after{background:var(--teal2);}
+.subj.info-new:hover{border-color:var(--teal2);background:rgba(26,188,156,0.15);}
+.new-flag{
+  position:absolute;top:8px;right:8px;
+  padding:2px 7px;border-radius:4px;font-size:8px;font-weight:700;letter-spacing:.06em;
+  background:rgba(26,188,156,0.3);color:var(--teal2);border:1px solid rgba(26,188,156,0.5);
+}
+
+.subj-icon{font-size:22px;margin-bottom:7px;}
+.subj-label{display:inline-block;padding:2px 6px;border-radius:4px;font-size:8px;font-weight:700;letter-spacing:.05em;margin-bottom:5px;}
+.lbl-must{background:rgba(192,57,43,0.2);color:#E74C3C;border:1px solid rgba(192,57,43,0.3);}
+.lbl-new-must{background:rgba(26,188,156,0.2);color:var(--teal2);border:1px solid rgba(26,188,156,0.4);}
+.lbl-sel{background:rgba(39,174,96,0.2);color:#58D68D;border:1px solid rgba(39,174,96,0.3);}
+.lbl-sci{background:rgba(108,52,131,0.2);color:#C39BD3;border:1px solid rgba(108,52,131,0.3);}
+
+.subj-name{font-family:'Noto Serif JP',serif;font-size:14px;font-weight:700;margin-bottom:3px;}
+.subj-sub{font-size:9px;color:var(--gray);margin-bottom:8px;line-height:1.5;}
+.prog-wrap{height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:2px;background:var(--sc);transition:width 1.3s ease;}
+.prog-row{display:flex;justify-content:space-between;margin-top:4px;font-size:9px;color:var(--gray);}
+.prog-row span:last-child{font-family:'DM Mono',monospace;color:var(--cream);}
+.subj-count{position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.35);border-radius:5px;padding:2px 6px;font-family:'DM Mono',monospace;font-size:9px;color:var(--gray);}
+
+/* 理科選択説明 */
+.sci-select-card{
+  background:rgba(108,52,131,0.1);border:1px solid rgba(108,52,131,0.25);
+  border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px;
+}
+.sci-header{font-size:12px;font-weight:700;color:var(--purple2);margin-bottom:2px;display:flex;align-items:center;gap:6px;}
+.sci-pattern{font-size:10px;color:var(--cream2);line-height:1.6;}
+.sci-pattern strong{color:var(--purple2);}
+
+/* STAT */
+.stat-big{font-family:'DM Mono',monospace;font-size:36px;font-weight:500;line-height:1;margin:6px 0 4px;}
+.stat-change{font-size:12px;}
+.up{color:var(--green3);}
+
+/* FLASHCARD */
+.flashcard{
+  background:linear-gradient(135deg,rgba(212,160,23,0.12),rgba(26,82,118,0.12));
+  border:1px solid rgba(212,160,23,0.22);border-radius:15px;padding:24px 22px;
+  text-align:center;cursor:pointer;min-height:150px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  transition:all .4s;position:relative;overflow:hidden;
+}
+.flashcard:hover{transform:scale(1.01);border-color:rgba(212,160,23,0.38);}
+.fc-side{font-size:9px;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:3px;}
+.fc-q{font-family:'Noto Serif JP',serif;font-size:17px;font-weight:700;line-height:1.45;}
+.fc-a{font-size:13px;color:var(--cream2);line-height:1.7;display:none;}
+.flashcard.flipped .fc-q{display:none;}
+.flashcard.flipped .fc-a{display:block;}
+.fc-hint{font-size:10px;color:var(--gray);margin-top:6px;}
+.fc-actions-flip,.fc-actions-judge{display:flex;gap:8px;justify-content:center;margin-top:12px;}
+.fc-btn{padding:7px 18px;border-radius:8px;border:none;cursor:pointer;font-family:'Noto Sans JP',sans-serif;font-size:11px;font-weight:500;transition:all .2s;}
+.fc-ok{background:rgba(39,174,96,0.22);color:#58D68D;border:1px solid rgba(39,174,96,0.38);}
+.fc-ok:hover{background:rgba(39,174,96,0.38);}
+.fc-ng{background:rgba(192,57,43,0.18);color:#E74C3C;border:1px solid rgba(192,57,43,0.32);}
+.fc-ng:hover{background:rgba(192,57,43,0.32);}
+.fc-flip{background:rgba(212,160,23,0.18);color:var(--gold2);border:1px solid rgba(212,160,23,0.32);}
+.fc-flip:hover{background:rgba(212,160,23,0.32);}
+.fc-nav{display:flex;align-items:center;justify-content:space-between;font-size:10px;color:var(--gray);margin-top:7px;}
+.fc-count{font-family:'DM Mono',monospace;font-size:11px;}
+
+/* TABS */
+.tabs{display:flex;gap:3px;background:rgba(0,0,0,0.35);padding:4px;border-radius:10px;width:fit-content;margin-bottom:14px;flex-wrap:wrap;}
+.tb{padding:5px 13px;border:none;background:transparent;color:var(--gray);font-family:'Noto Sans JP',sans-serif;font-size:11px;cursor:pointer;border-radius:7px;transition:all .2s;}
+.tb.on{background:rgba(255,255,255,0.1);color:var(--cream);}
+.tb.info-tab.on{background:rgba(26,188,156,0.2);color:var(--teal2);}
+
+/* TEST RESULT */
+.test-result-row{display:flex;gap:10px;align-items:stretch;}
+.result-score{background:linear-gradient(135deg,rgba(39,174,96,0.18),rgba(39,174,96,0.06));border:1px solid rgba(39,174,96,0.28);border-radius:11px;padding:14px;text-align:center;min-width:95px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;}
+.score-num{font-family:'DM Mono',monospace;font-size:38px;font-weight:500;color:#58D68D;line-height:1;}
+.result-detail{flex:1;display:flex;flex-direction:column;gap:5px;}
+.rd-item{display:flex;align-items:center;gap:7px;padding:6px 9px;background:rgba(255,255,255,0.03);border-radius:7px;font-size:11px;}
+.rd-name{flex:1;}
+.rd-bar-w{width:75px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;}
+.rd-bar-f{height:100%;border-radius:2px;}
+.rd-pct{font-family:'DM Mono',monospace;font-size:10px;width:28px;text-align:right;}
+
+/* CHAT */
+.chat-wrap{display:flex;flex-direction:column;gap:7px;max-height:200px;overflow-y:auto;padding-right:4px;}
+.bubble{padding:9px 12px;border-radius:12px;font-size:12px;line-height:1.65;max-width:88%;}
+.b-ai{background:rgba(255,255,255,0.06);align-self:flex-start;}
+.b-user{background:rgba(212,160,23,0.18);border:1px solid rgba(212,160,23,0.22);margin-left:auto;text-align:right;}
+.chat-input-row{display:flex;gap:7px;margin-top:10px;}
+.chat-in{flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:8px 12px;color:var(--cream);font-family:'Noto Sans JP',sans-serif;font-size:12px;outline:none;transition:border-color .2s;}
+.chat-in:focus{border-color:rgba(212,160,23,0.4);}
+.chat-in::placeholder{color:var(--gray);}
+.chat-send{padding:8px 14px;background:var(--gold);border:none;border-radius:8px;color:var(--navy);cursor:pointer;font-size:12px;font-weight:700;transition:all .2s;}
+.chat-send:hover{background:var(--gold2);}
+
+/* COUNTDOWN */
+.countdown{display:flex;gap:12px;justify-content:center;padding:8px 0;}
+.cd-box{text-align:center;}
+.cd-num{font-family:'DM Mono',monospace;font-size:34px;font-weight:500;color:var(--gold2);line-height:1;text-shadow:0 0 14px rgba(212,160,23,0.4);}
+.cd-unit{font-size:9px;color:var(--gray);margin-top:3px;}
+.cd-sep{font-family:'DM Mono',monospace;font-size:26px;color:var(--gray);align-self:flex-start;margin-top:5px;}
+
+/* PASS TABLE */
+.pass-table{display:flex;flex-direction:column;gap:5px;}
+.pt-row{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);font-size:11px;}
+.pt-icon{font-size:14px;flex-shrink:0;}
+.pt-name{flex:1;}
+.pt-status{padding:2px 8px;border-radius:5px;font-size:9px;font-weight:700;}
+.ps-pass{background:rgba(39,174,96,0.18);color:#58D68D;border:1px solid rgba(39,174,96,0.28);}
+.ps-doing{background:rgba(212,160,23,0.18);color:var(--gold2);border:1px solid rgba(212,160,23,0.28);}
+.ps-yet{background:rgba(255,255,255,0.04);color:var(--gray);border:1px solid rgba(255,255,255,0.08);}
+.ps-new{background:rgba(26,188,156,0.18);color:var(--teal2);border:1px solid rgba(26,188,156,0.35);}
+.pt-score{font-family:'DM Mono',monospace;font-size:10px;color:var(--gray);}
+
+/* QA */
+.qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.qa{padding:10px;border-radius:9px;border:1px solid rgba(255,255,255,0.09);background:rgba(255,255,255,0.03);cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .2s;font-family:'Noto Sans JP',sans-serif;text-align:left;}
+.qa:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.17);}
+.qa.prim{background:rgba(212,160,23,0.13);border-color:rgba(212,160,23,0.32);}
+.qa.prim:hover{background:rgba(212,160,23,0.25);}
+.qa.info-qa{background:rgba(26,188,156,0.1);border-color:rgba(26,188,156,0.3);}
+.qa.info-qa:hover{background:rgba(26,188,156,0.2);}
+.qa-ic{font-size:17px;}
+.qa-tt{font-size:11px;color:var(--cream);font-weight:500;}
+.qa-ss{font-size:9px;color:var(--gray);}
+
+/* STREAK */
+.streak-big{text-align:center;padding:7px 0 3px;}
+.streak-num{font-family:'DM Mono',monospace;font-size:50px;font-weight:500;color:var(--gold2);line-height:1;text-shadow:0 0 22px rgba(212,160,23,0.44);}
+.streak-label{font-size:11px;color:var(--gray);margin-top:3px;}
+.week-dots{display:flex;gap:4px;justify-content:center;margin-top:12px;flex-wrap:wrap;}
+.wd{width:20px;height:20px;border-radius:5px;font-size:8px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.05);color:var(--gray);}
+.wd.done{background:rgba(212,160,23,0.18);color:var(--gold2);border:1px solid rgba(212,160,23,0.32);}
+.wd.today{background:var(--gold);color:var(--navy);font-weight:700;box-shadow:0 0 10px rgba(212,160,23,0.5);}
+
+/* ZOOM / LINE */
+.zoom-card{background:linear-gradient(135deg,rgba(41,128,185,0.16),rgba(13,27,42,0.8));border:1px solid rgba(41,128,185,0.28);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;}
+.zoom-top{display:flex;align-items:center;gap:9px;}
+.zoom-btn{padding:8px;border-radius:7px;border:1px solid rgba(41,128,185,0.38);background:rgba(41,128,185,0.18);color:var(--cream);font-family:'Noto Sans JP',sans-serif;font-size:11px;cursor:pointer;transition:all .2s;width:100%;}
+.zoom-btn:hover{background:rgba(41,128,185,0.38);}
+.line-card{background:linear-gradient(135deg,rgba(39,174,96,0.13),rgba(13,27,42,0.8));border:1px solid rgba(39,174,96,0.22);border-radius:12px;padding:14px;}
+.line-header{display:flex;align-items:center;gap:7px;margin-bottom:8px;}
+.line-msg{background:rgba(255,255,255,0.04);border-radius:9px;padding:10px;font-size:11px;line-height:1.7;color:var(--cream2);border:1px solid rgba(255,255,255,0.05);}
+.line-msg strong{color:var(--green3);}
+.line-sent{font-size:9px;color:var(--gray);margin-top:5px;text-align:right;}
+
+/* ANNOUNCE */
+.ann-item{display:flex;align-items:flex-start;gap:8px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.ann-item:last-child{border-bottom:none;}
+.ann-tag{padding:2px 7px;border-radius:4px;font-size:8px;font-weight:700;flex-shrink:0;margin-top:2px;letter-spacing:.04em;}
+.at-new{background:rgba(192,57,43,0.22);color:#E74C3C;border:1px solid rgba(192,57,43,0.32);}
+.at-zoom{background:rgba(41,128,185,0.18);color:#5DADE2;border:1px solid rgba(41,128,185,0.28);}
+.at-info{background:rgba(212,160,23,0.16);color:var(--gold2);border:1px solid rgba(212,160,23,0.28);}
+.at-info2{background:rgba(26,188,156,0.18);color:var(--teal2);border:1px solid rgba(26,188,156,0.35);}
+.ann-title{font-size:12px;margin-bottom:2px;}
+.ann-date{font-size:10px;color:var(--gray);}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px;}
+
+/* FOOTER */
+footer{padding:13px 32px;border-top:1px solid rgba(212,160,23,0.1);display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--gray);background:rgba(13,27,42,0.7);}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.82);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;}
+.overlay.show{opacity:1;pointer-events:all;}
+.modal{background:var(--navy2);border:1px solid rgba(212,160,23,0.18);border-radius:18px;padding:30px;width:560px;max-width:92vw;max-height:86vh;overflow-y:auto;transform:translateY(16px);transition:transform .3s;}
+.overlay.show .modal{transform:none;}
+.modal-close{float:right;background:none;border:none;color:var(--gray);font-size:19px;cursor:pointer;}
+.modal h2{font-family:'Noto Serif JP',serif;font-size:18px;font-weight:700;margin-bottom:5px;}
+.modal-sub{font-size:12px;color:var(--cream2);margin-bottom:16px;line-height:1.7;}
+.unit-list{display:flex;flex-direction:column;gap:7px;}
+.unit-item{display:flex;align-items:center;gap:9px;padding:10px 12px;background:rgba(255,255,255,0.04);border-radius:9px;cursor:pointer;border:1px solid rgba(255,255,255,0.06);transition:all .2s;}
+.unit-item:hover{background:rgba(255,255,255,0.09);}
+.unit-item.done{border-color:rgba(39,174,96,0.28);}
+.unit-item.active{border-color:rgba(212,160,23,0.38);background:rgba(212,160,23,0.05);}
+.unit-item.info-unit{border-color:rgba(26,188,156,0.28);background:rgba(26,188,156,0.04);}
+.ui-num{width:28px;height:28px;border-radius:6px;flex-shrink:0;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:10px;color:var(--gray);}
+.unit-item.done .ui-num{background:rgba(39,174,96,0.16);color:#58D68D;}
+.unit-item.active .ui-num{background:rgba(212,160,23,0.16);color:var(--gold2);}
+.unit-item.info-unit .ui-num{background:rgba(26,188,156,0.16);color:var(--teal2);}
+.ui-info{flex:1;}
+.ui-title{font-size:12px;font-weight:500;margin-bottom:2px;}
+.ui-meta{font-size:9px;color:var(--gray);}
+.ui-badge{padding:2px 7px;border-radius:4px;font-size:9px;background:rgba(255,255,255,0.05);color:var(--gray);}
+.ui-badge.voice{background:rgba(212,160,23,0.13);color:var(--gold2);}
+.ui-badge.test{background:rgba(192,57,43,0.13);color:#E74C3C;}
+.ui-badge.new-content{background:rgba(26,188,156,0.18);color:var(--teal2);}
+</style>
+</head>
+<body>
+<div class="bg-wrap"><div class="bg-grad"></div><div class="bg-dots"></div><div class="bg-grid"></div></div>
+
+<div class="app">
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-gem">G</div>
+    <div class="logo-t"><div class="m">GAMBAシステム</div><div class="s">江原予備校</div></div>
+    <span class="logo-badge">高認コース</span>
+    <span class="new-badge">R8対応済</span>
+  </div>
+  <nav class="hdr-nav">
+    <button class="hn on">ダッシュボード</button>
+    <button class="hn">暗記カード</button>
+    <button class="hn">確認テスト</button>
+    <button class="hn">音声講義</button>
+    <button class="hn">進捗レポート</button>
+    <button class="hn">AI質問</button>
+  </nav>
+  <div class="hdr-r">
+    <div class="notif">🔔<span class="nbadge">3</span></div>
+    <div class="avatar">田</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- 令和8年度 変更通知バナー -->
+  <div class="alert-banner">
+    <div class="alert-icon">📢</div>
+    <div class="alert-text">
+      <div class="alert-title">【重要】令和8年度（2026年）から「情報」が必修科目として追加されます</div>
+      <div class="alert-sub">合格に必要な科目数が最大<strong>9〜10科目</strong>に増加。新科目「情報（情報Ⅰ）」はデジタルリテラシー・プログラミング・データ分析が出題範囲です。GAMBAでは専用カリキュラムを準備中です。</div>
+    </div>
+    <div class="alert-tag">2026年度〜<br>情報 必修化</div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">📜 高卒認定試験対策 令和8年度対応版</div>
+      <h1>諦めなければ、<em>必ず合格できる。</em></h1>
+      <p class="hero-sub">高認は1科目ずつ合格を積み重ねられる試験です。<br>令和8年度から「情報」が加わりますが、GAMBAが基礎から丁寧にサポートします。</p>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-num">10</div><div class="hstat-label">最大受験科目数<br><span style="font-size:9px;color:var(--teal2)">R8〜情報追加</span></div></div>
+      <div class="hstat"><div class="hstat-num">3</div><div class="hstat-label">合格済み科目</div></div>
+      <div class="hstat"><div class="hstat-num">127</div><div class="hstat-label">残り日数</div></div>
+    </div>
+  </div>
+
+  <!-- STAT OVERVIEW -->
+  <div class="g4">
+    <div class="card">
+      <div class="ctitle"><span class="dot" style="background:var(--red2);"></span>今週の学習時間</div>
+      <div class="stat-big">11.5<small style="font-size:15px;color:var(--gray)">h</small></div>
+      <div class="stat-change up">↑ 先週比 +1.5h</div>
+    </div>
+    <div class="card">
+      <div class="ctitle"><span class="dot" style="background:var(--gold);"></span>完了暗記カード</div>
+      <div class="stat-big">284</div>
+      <div class="stat-change up">↑ 今月累計</div>
+    </div>
+    <div class="card">
+      <div class="ctitle"><span class="dot" style="background:var(--green2);"></span>テスト平均点</div>
+      <div class="stat-big">74<small style="font-size:15px;color:var(--gray)">点</small></div>
+      <div class="stat-change up">↑ 先月比 +9点</div>
+    </div>
+    <div class="card">
+      <div class="ctitle"><span class="dot" style="background:var(--teal2);"></span>情報科目 準備度</div>
+      <div class="stat-big">12<small style="font-size:15px;color:var(--gray)">%</small></div>
+      <div class="stat-change" style="color:var(--teal2);">↗ 開始しましょう</div>
+    </div>
+  </div>
+
+  <!-- 科目グリッド（令和8年度 全科目） -->
+  <div>
+    <div class="sec-head" style="margin-bottom:6px;">
+      全科目 — 学習進捗
+      <span style="font-size:11px;font-weight:400;color:var(--gray);font-family:'Noto Sans JP',sans-serif;margin-left:4px;">（令和8年度〜 最大10科目対応）</span>
+    </div>
+
+    <!-- 必修5科目 -->
+    <div style="font-size:10px;color:var(--gray);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px;"><span style="width:3px;height:12px;background:var(--red2);border-radius:2px;display:inline-block;"></span>必修科目</div>
+    <div class="subjects-top-row">
+      <div class="subj" style="--sc:#E67E22;" onclick="openModal('jpn')">
+        <span class="subj-count">152枚</span>
+        <div class="subj-icon">📖</div>
+        <span class="subj-label lbl-must">必修</span>
+        <div class="subj-name">国語</div>
+        <div class="subj-sub">現代文・古文・語彙</div>
+        <div class="prog-wrap"><div class="prog-fill" style="width:72%"></div></div>
+        <div class="prog-row"><span>72%</span><span>72%</span></div>
+      </div>
+      <div class="subj" style="--sc:#E74C3C;" onclick="openModal('math')">
+        <span class="subj-count">188枚</span>
+        <div class="subj-icon">📐</div>
+        <span class="subj-label lbl-must">必修</span>
+        <div class="subj-name">数学</div>
+        <div class="subj-sub">数と式・方程式・関数</div>
+        <div class="prog-wrap"><div class="prog-fill" style="width:58%"></div></div>
+        <div class="prog-row"><span>58%</span><span>58%</span></div>
+      </div>
+      <div class="subj" style="--sc:#3498DB;" onclick="openModal('eng')">
+        <span class="subj-count">210枚</span>
+        <div class="subj-icon">🔤</div>
+        <span class="subj-label lbl-must">必修</span>
+        <div class="subj-name">英語</div>
+        <div class="subj-sub">文法・単語・読解</div>
+        <div class="prog-wrap"><div class="prog-fill" style="width:85%"></div></div>
+        <div class="prog-row"><span>85%</span><span>85%</span></div>
+      </div>
+      <div class="subj" style="--sc:#2980B9;" onclick="openModal('pub')">
+        <span class="subj-count">130枚</span>
+        <div class="subj-icon">⚖️</div>
+        <span class="subj-label lbl-must">必修</span>
+        <div class="subj-name">公共</div>
+        <div class="subj-sub">政治・経済・倫理・国際</div>
+        <div class="prog-wrap"><div class="prog-fill" style="width:55%"></div></div>
+        <div class="prog-row"><span>55%</span><span>55%</span></div>
+      </div>
+      <!-- 情報（新必修） -->
+      <div class="subj info-new" style="--sc:var(--teal2);" onclick="openModal('info')">
+        <span class="new-flag">NEW R8〜</span>
+        <div class="subj-icon">💻</div>
+        <span class="subj-label lbl-new-must">新必修</span>
+        <div class="subj-name">情報</div>
+        <div class="subj-sub">情報Ⅰ・デジタル・プログラミング</div>
+        <div class="prog-wrap"><div class="prog-fill" style="width:12%"></div></div>
+        <div class="prog-row"><span>12%</span><span>12%</span></div>
+      </div>
+    </div>
+
+    <!-- 選択科目（地理・歴史） -->
+    <div style="font-size:10px;color:var(--gray);letter-spacing:.08em;text-transform:uppercase;margin:14px 0 8px;display:flex;align-items:center;gap:6px;"><span style="width:3px;height:12px;background:var(--green2);border-radius:2px;display:inline-block;"></span>地理・歴史（各1科目選択）</div>
+    <div class="subjects-mid-row">
+      <div class="subj" style="--sc:#16A085;" onclick="openModal('geo')">
+        <span class="subj-count">128枚</span>
+        <div class="subj-icon">🗺️</div>
+        <span class="subj-label lbl-sel">地理総合</span>
+        <div class="subj-name">地理</div>
+        <div class="subj-sub">世界・日本・統計読解</div>
+        <div class="prog-wrap"><div class="prog-fill" style="width:30%"></div></div>
+        <div class="prog-row"><span>30%</span><span>30%</span></div>
+      </div>
+      <div class="subj" style="--sc:#27AE60;" onclick="openModal('hist')">
+        <span class="subj-count">168枚</span>
+        <div class="subj-icon">📜</div>
+        <span class="subj-label lbl-sel">歴史総合</span>
+        <div class="subj-name">歴史</div>
+        <div class="subj-sub">世界史＋日本史（統合科目）</div>
+        <div class="prog-wrap"><div class="prog-fill" style="width:40%"></div></div>
+        <div class="prog-row"><span>40%</span><span>40%</span></div>
+      </div>
+      <!-- 理科選択説明 -->
+      <div class="sci-select-card" style="grid-column:span 3;">
+        <div class="sci-header">🔬 理科 — 2パターンから選択（2〜3科目）</div>
+        <div class="sci-pattern">
+          <strong>Aパターン（2科目）：</strong>「科学と人間生活」＋ 物理基礎・化学基礎・生物基礎・地学基礎のうち1科目<br>
+          <strong>Bパターン（3科目）：</strong>物理基礎・化学基礎・生物基礎・地学基礎のうち3科目
+        </div>
+      </div>
+    </div>
+
+    <!-- 理科4科目 -->
+    <div style="font-size:10px;color:var(--gray);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px;"><span style="width:3px;height:12px;background:var(--purple2);border-radius:2px;display:inline-block;"></span>理科（2〜3科目選択）</div>
+    <div class="subjects-top-row">
+      <div class="subj" style="--sc:#8E44AD;" onclick="openModal('sci-h')">
+        <span class="subj-count">160枚</span>
+        <div class="subj-icon">⚗️</div>
+        <span class="subj-label lbl-sci">理科選択A</span>
+        <div class="subj-name">科学と人間生活</div>
+        <div class="subj-sub">物理・化学・生物・地学応用</div>
+        <div class="prog-wrap"><div class="prog-fill" style="width:45%"></div></div>
+        <div class="prog-row"><span>45%</span><span>45%</span></div>
+      </div>
+      <div class="subj" style="--sc:#1ABC9C;" onclick="openModal('bio')">
+        <span class="subj-count">118枚</span>
+        <div class="subj-icon">🧬</div>
+        <span class="subj-label lbl-sci">理科基礎</span>
+        <div class="subj-name">生物基礎</div>
+        <div class="subj-sub">細胞・遺伝・体内環境</div>
+        <div class="prog-wrap"><div class="prog-fill" style="width:38%"></div></div>
+        <div class="prog-row"><span>38%</span><span>38%</span></div>
+      </div>
+      <div class="subj" style="--sc:#E74C3C;" onclick="openModal('phy')">
+        <span class="subj-count">102枚</span>
+        <div class="subj-icon">⚡</div>
+        <span class="subj-label lbl-sci">理科基礎</span>
+        <div class="subj-name">物理基礎</div>
+        <div class="subj-sub">力学・波動・電気・磁気</div>
+        <div class="prog-wrap"><div class="prog-fill" style="width:20%"></div></div>
+        <div class="prog-row"><span>20%</span><span>20%</span></div>
+      </div>
+      <div class="subj" style="--sc:#F39C12;" onclick="openModal('chem')">
+        <span class="subj-count">110枚</span>
+        <div class="subj-icon">🧪</div>
+        <span class="subj-label lbl-sci">理科基礎</span>
+        <div class="subj-name">化学基礎</div>
+        <div class="subj-sub">物質・化学変化・イオン</div>
+        <div class="prog-wrap"><div class="prog-fill" style="width:22%"></div></div>
+        <div class="prog-row"><span>22%</span><span>22%</span></div>
+      </div>
+      <div class="subj" style="--sc:#5D6D7E;" onclick="openModal('earth')">
+        <span class="subj-count">95枚</span>
+        <div class="subj-icon">🌏</div>
+        <span class="subj-label lbl-sci">理科基礎</span>
+        <div class="subj-name">地学基礎</div>
+        <div class="subj-sub">地球・宇宙・気象・地質</div>
+        <div class="prog-wrap"><div class="prog-fill" style="width:15%"></div></div>
+        <div class="prog-row"><span>15%</span><span>15%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="gmain">
+    <div style="display:flex;flex-direction:column;gap:16px;">
+
+      <!-- FLASHCARD -->
+      <div class="card" style="padding:0;overflow:hidden;border:1px solid rgba(212,160,23,0.18);">
+        <div style="padding:14px 18px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div class="sec-head" style="margin-bottom:0;">暗記カード — 今日の1枚</div>
+          <div class="tabs" style="margin-bottom:0;">
+            <button class="tb on" onclick="switchSubject('jpn',this)">国語</button>
+            <button class="tb" onclick="switchSubject('math',this)">数学</button>
+            <button class="tb" onclick="switchSubject('eng',this)">英語</button>
+            <button class="tb" onclick="switchSubject('hist',this)">歴史</button>
+            <button class="tb info-tab" onclick="switchSubject('info',this)">💻情報</button>
+          </div>
+        </div>
+        <div style="padding:14px 18px 18px;">
+          <div class="flashcard" id="fc" onclick="flipCard()">
+            <div class="fc-side" id="fc-side">📖 国語 — 古文単語</div>
+            <div class="fc-q" id="fc-q">「あはれ」の意味を答えなさい</div>
+            <div class="fc-a" id="fc-a">
+              <strong style="color:var(--gold2);font-size:15px;">しみじみとした感情・趣深さ・かわいそう</strong><br>
+              <span style="font-size:11px;color:var(--cream3);margin-top:5px;display:block;">「もののあはれ」など、平安文学を代表する美的概念。</span>
+            </div>
+            <div class="fc-hint" id="fc-hint">👆 タップして答えを確認</div>
+          </div>
+          <div class="fc-actions-flip" id="fc-actions-flip"><button class="fc-btn fc-flip" onclick="event.stopPropagation();flipCard()">🔄 答えを見る</button></div>
+          <div class="fc-actions-judge" id="fc-actions-judge" style="display:none;">
+            <button class="fc-btn fc-ng" onclick="event.stopPropagation();nextCard('ng')">✕ もう一度</button>
+            <button class="fc-btn fc-ok" onclick="event.stopPropagation();nextCard('ok')">○ 覚えた！</button>
+          </div>
+          <div class="fc-nav"><span style="color:var(--gray);font-size:10px;">本日の進捗</span><span class="fc-count" id="fc-count">23 / 50 枚</span></div>
+        </div>
+      </div>
+
+      <!-- TEST RESULT -->
+      <div class="card">
+        <div class="sec-head">最新テスト — 公共 確認テスト #4</div>
+        <div class="test-result-row">
+          <div class="result-score">
+            <div class="score-num">82</div>
+            <div style="font-size:10px;color:var(--gray);">/ 100点</div>
+            <div style="font-size:10px;color:var(--gray);margin-top:6px;">合格ライン</div>
+            <strong style="color:var(--green3);font-size:11px;">40点 ✓</strong>
+          </div>
+          <div class="result-detail">
+            <div class="rd-item"><span class="rd-name">日本国憲法・人権</span><div class="rd-bar-w"><div class="rd-bar-f" style="width:95%;background:#27AE60;"></div></div><span class="rd-pct up">95%</span></div>
+            <div class="rd-item"><span class="rd-name">三権分立・政治</span><div class="rd-bar-w"><div class="rd-bar-f" style="width:85%;background:#27AE60;"></div></div><span class="rd-pct up">85%</span></div>
+            <div class="rd-item"><span class="rd-name">経済のしくみ</span><div class="rd-bar-w"><div class="rd-bar-f" style="width:75%;background:var(--gold);"></div></div><span class="rd-pct" style="color:var(--gold2);">75%</span></div>
+            <div class="rd-item"><span class="rd-name">国際社会・環境</span><div class="rd-bar-w"><div class="rd-bar-f" style="width:60%;background:var(--gold);"></div></div><span class="rd-pct" style="color:var(--gold2);">60%</span></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;padding:9px 11px;background:rgba(26,188,156,0.08);border-radius:7px;font-size:11px;border-left:3px solid var(--teal2);line-height:1.6;">
+          💻 <strong style="color:var(--teal2);">情報科目準備メモ：</strong>令和8年度から必修になります。今から少しずつ始めましょう。GAMBAの「情報」カードを開始することをおすすめします。
+        </div>
+      </div>
+
+      <!-- AI CHAT -->
+      <div class="card">
+        <div class="sec-head">AI質問チャット</div>
+        <div class="chat-wrap" id="chat-wrap">
+          <div class="bubble b-ai">こんにちは！令和8年度から「情報」が必修科目に追加されます。既存科目の対策はもちろん、新科目「情報」の学習もサポートします。何でも聞いてください。</div>
+          <div class="bubble b-user">「歴史総合」って世界史と日本史が一緒になったんですか？</div>
+          <div class="bubble b-ai">
+            はい、そうです！令和6年度から「歴史総合」として統合されました。<br>
+            世界の動きと日本の歴史を関連付けながら学ぶ科目です。特に<strong style="color:var(--gold2)">近現代史（19〜20世紀）</strong>の比重が大きいので、そこから優先して暗記カードを進めましょう！
+          </div>
+        </div>
+        <div class="chat-input-row">
+          <input class="chat-in" id="chat-in" placeholder="高認の疑問を入力…（例：情報科目のプログラミングはどこまで？）">
+          <button class="chat-send" onclick="sendChat()">送信</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div style="display:flex;flex-direction:column;gap:13px;">
+
+      <!-- COUNTDOWN -->
+      <div class="card" style="border-color:rgba(212,160,23,0.22);">
+        <div class="ctitle"><span class="dot" style="background:var(--gold);"></span>試験まで残り</div>
+        <div class="countdown">
+          <div class="cd-box"><div class="cd-num" id="cd-d">127</div><div class="cd-unit">日</div></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-box"><div class="cd-num" id="cd-h">14</div><div class="cd-unit">時間</div></div>
+          <div class="cd-sep">:</div>
+          <div class="cd-box"><div class="cd-num" id="cd-m">32</div><div class="cd-unit">分</div></div>
+        </div>
+        <div style="text-align:center;font-size:10px;color:var(--gray);margin-top:4px;">次回：2026年 8月（令和8年度第1回）</div>
+      </div>
+
+      <!-- STREAK -->
+      <div class="card">
+        <div class="ctitle"><span class="dot" style="background:var(--gold);"></span>学習ストリーク</div>
+        <div class="streak-big">
+          <div class="streak-num">18</div>
+          <div class="streak-label">日連続学習中 🔥</div>
+        </div>
+        <div class="week-dots">
+          <div class="wd done">月</div><div class="wd done">火</div><div class="wd done">水</div><div class="wd done">木</div><div class="wd done">金</div><div class="wd done">土</div><div class="wd done">日</div><div class="wd done">月</div><div class="wd done">火</div><div class="wd done">水</div><div class="wd done">木</div><div class="wd done">金</div><div class="wd done">土</div><div class="wd done">日</div><div class="wd done">月</div><div class="wd done">火</div><div class="wd done">水</div><div class="wd today">今</div>
+        </div>
+      </div>
+
+      <!-- PASS STATUS (令和8年度全科目) -->
+      <div class="card">
+        <div class="ctitle"><span class="dot" style="background:var(--green2);"></span>科目合格状況（R8対応）</div>
+        <div class="pass-table">
+          <div class="pt-row"><span class="pt-icon">🔤</span><span class="pt-name">英語（必修）</span><span class="pt-status ps-pass">合格済</span><span class="pt-score">免除</span></div>
+          <div class="pt-row"><span class="pt-icon">📖</span><span class="pt-name">国語（必修）</span><span class="pt-status ps-pass">合格済</span><span class="pt-score">前回</span></div>
+          <div class="pt-row"><span class="pt-icon">⚖️</span><span class="pt-name">公共（必修）</span><span class="pt-status ps-pass">合格済</span><span class="pt-score">前回</span></div>
+          <div class="pt-row"><span class="pt-icon">📐</span><span class="pt-name">数学（必修）</span><span class="pt-status ps-doing">学習中</span><span class="pt-score">74点</span></div>
+          <div class="pt-row"><span class="pt-icon">📜</span><span class="pt-name">歴史（地歴選択）</span><span class="pt-status ps-doing">学習中</span><span class="pt-score">62点</span></div>
+          <div class="pt-row"><span class="pt-icon">🗺️</span><span class="pt-name">地理（地歴選択）</span><span class="pt-status ps-yet">未着手</span><span class="pt-score">—</span></div>
+          <div class="pt-row"><span class="pt-icon">⚗️</span><span class="pt-name">科学と人間生活</span><span class="pt-status ps-yet">未着手</span><span class="pt-score">—</span></div>
+          <div class="pt-row"><span class="pt-icon">🧬</span><span class="pt-name">生物基礎（理科）</span><span class="pt-status ps-yet">未着手</span><span class="pt-score">—</span></div>
+          <div class="pt-row" style="border:1px solid rgba(26,188,156,0.25);background:rgba(26,188,156,0.04);">
+            <span class="pt-icon">💻</span><span class="pt-name" style="color:var(--teal2);">情報（新必修R8〜）</span><span class="pt-status ps-new">準備中</span><span class="pt-score">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- QA -->
+      <div class="card">
+        <div class="ctitle"><span class="dot" style="background:var(--red2);"></span>クイックアクション</div>
+        <div class="qa-grid">
+          <button class="qa prim"><span class="qa-ic">🃏</span><div><div class="qa-tt">暗記カード</div><div class="qa-ss">歴史 50問</div></div></button>
+          <button class="qa"><span class="qa-ic">📝</span><div><div class="qa-tt">確認テスト</div><div class="qa-ss">数学 模擬</div></div></button>
+          <button class="qa info-qa"><span class="qa-ic">💻</span><div><div class="qa-tt">情報 入門</div><div class="qa-ss">R8新科目</div></div></button>
+          <button class="qa"><span class="qa-ic">🔊</span><div><div class="qa-tt">音声講義</div><div class="qa-ss">2本未視聴</div></div></button>
+        </div>
+      </div>
+
+      <!-- ZOOM / LINE -->
+      <div class="zoom-card">
+        <div class="zoom-top"><span style="font-size:22px;">🖥️</span><div><div style="font-size:13px;font-weight:500;">ZOOM 個別指導</div><div style="font-size:10px;color:var(--gray);">講師に直接相談・解説</div></div></div>
+        <button class="zoom-btn">📅 ZOOMを予約する</button>
+        <div style="font-size:9px;color:var(--gray);text-align:center;">次回空き枠：1月20日(月) 19:00〜</div>
+      </div>
+
+      <div class="line-card">
+        <div class="line-header"><span style="font-size:20px;">💬</span><span style="font-size:13px;font-weight:500;">LINE 進捗通知（最新）</span></div>
+        <div class="line-msg">
+          【江原予備校】<br>
+          田中花子さんの<strong>公共テスト#4</strong>結果<br>
+          スコア：<strong>82点</strong>（合格ライン:40点 ✓）<br>
+          連続学習：<strong>18日目</strong> 🔥<br>
+          💻 情報科目の準備を開始しましょう
+        </div>
+        <div class="line-sent">保護者・担当講師に送信済 ✓ 1月15日 15:32</div>
+      </div>
+
+      <!-- ANNOUNCE -->
+      <div class="card">
+        <div class="ctitle"><span class="dot" style="background:var(--red2);"></span>お知らせ</div>
+        <div>
+          <div class="ann-item"><span class="ann-tag at-info2">R8新科目</span><div><div class="ann-title">「情報」専用カリキュラム 準備開始</div><div class="ann-date">2026年1月15日</div></div></div>
+          <div class="ann-item"><span class="ann-tag at-zoom">ZOOM</span><div><div class="ann-title">歴史総合 特別講義（1/22）</div><div class="ann-date">2026年1月13日</div></div></div>
+          <div class="ann-item"><span class="ann-tag at-new">NEW</span><div><div class="ann-title">歴史総合・地理 暗記カード追加</div><div class="ann-date">2026年1月10日</div></div></div>
+          <div class="ann-item"><span class="ann-tag at-info">INFO</span><div><div class="ann-title">令和8年度 第1回 出願案内公開</div><div class="ann-date">2026年1月8日</div></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span>© 2026 江原予備校 — GAMBAシステム 高認コース（令和8年度対応版）</span>
+  <span>担当講師: 野田先生 ｜ support@ehara-yobiko.jp</span>
+  <span style="font-family:'DM Mono',monospace;">v2.0.0-r8</span>
+</footer>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="closeOverlay(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2 id="m-title"></h2>
+    <p class="modal-sub" id="m-sub"></p>
+    <div class="unit-list" id="m-units"></div>
+  </div>
+</div>
+
+<script>
+// FLASHCARD DATA
+const cards = {
+  jpn:[
+    {q:'「あはれ」の意味を答えなさい',a:'しみじみとした感情・趣深さ・かわいそう。平安文学の美的概念。',s:'📖 国語 — 古文単語'},
+    {q:'助動詞「む（ん）」の主な意味3つは？',a:'①推量「〜だろう」②意志「〜しよう」③婉曲「〜ような」',s:'📖 国語 — 古文文法'},
+    {q:'「をかし」の意味を答えなさい',a:'趣深い・面白い・きれいだ。枕草子の美意識のキーワード。',s:'📖 国語 — 古文単語'},
+  ],
+  math:[
+    {q:'二次方程式の解の公式を答えなさい',a:'x = (-b ± √(b²-4ac)) / 2a ※ax²+bx+c=0のとき',s:'📐 数学 — 方程式'},
+    {q:'判別式 D の定義と D>0 のとき解は？',a:'D = b²-4ac。D>0 のとき実数解が2つ存在する。',s:'📐 数学 — 判別式'},
+    {q:'(a+b)(a-b) を展開せよ',a:'a² - b²（平方の差）',s:'📐 数学 — 乗法公式'},
+  ],
+  eng:[
+    {q:'受動態の基本形を答えなさい',a:'be動詞 + 過去分詞（p.p.）例: The book was written by him.',s:'🔤 英語 — 文法'},
+    {q:'現在完了形の3つの用法は？',a:'①完了「〜した」②経験「〜したことがある」③継続「ずっと〜している」',s:'🔤 英語 — 時制'},
+    {q:'「although」の品詞と意味は？',a:'接続詞。「〜だけれども」という逆接の意味。文頭・文中で使える。',s:'🔤 英語 — 接続詞'},
+  ],
+  hist:[
+    {q:'第一次世界大戦の直接的きっかけは？',a:'1914年サラエボ事件。オーストリア皇太子夫妻がセルビア人に暗殺された事件。',s:'📜 歴史総合 — 近代'},
+    {q:'日本の高度経済成長期（1955〜1973）を象徴する3C は？',a:'カラーテレビ・クーラー・カー（自動車）。第2次消費革命の象徴。',s:'📜 歴史総合 — 戦後日本'},
+    {q:'冷戦終結の象徴的出来事（1989年）は？',a:'ベルリンの壁崩壊。東西ドイツを分断していた壁が市民によって壊された。',s:'📜 歴史総合 — 現代'},
+  ],
+  info:[
+    {q:'「情報モラル」とは何か答えなさい',a:'情報社会において適切に行動するための倫理観と態度。著作権・プライバシー・ネットマナーを含む。',s:'💻 情報 — 情報社会'},
+    {q:'「著作権」が保護する期間は創作から何年か？',a:'創作者の死後70年間（法人の場合は公表後70年）。',s:'💻 情報 — 著作権'},
+    {q:'プログラムの「変数」とは何か説明せよ',a:'データを一時的に保存するための名前のついた入れ物。値を代入・参照・変更できる。',s:'💻 情報 — プログラミング'},
+  ]
+};
+
+let currentSubject = 'jpn';
+let currentIdx = 0;
+let okCount = 23;
+let totalCards = 50;
+let flipped = false;
+
+function renderCard(){
+  const card = cards[currentSubject][currentIdx % cards[currentSubject].length];
+  document.getElementById('fc-q').textContent = card.q;
+  const isInfo = currentSubject === 'info';
+  document.getElementById('fc-a').innerHTML = `<strong style="color:${isInfo?'var(--teal2)':'var(--gold2)'};font-size:14px;">${card.a.split('。')[0]}</strong><br><span style="font-size:11px;color:var(--cream3);margin-top:4px;display:block;">${card.a.split('。').slice(1).join('。')}</span>`;
+  document.getElementById('fc-side').textContent = card.s;
+  document.getElementById('fc-hint').style.display = 'block';
+  document.getElementById('fc-actions-flip').style.display = 'flex';
+  document.getElementById('fc-actions-judge').style.display = 'none';
+  const fc = document.getElementById('fc');
+  fc.classList.remove('flipped');
+  if(isInfo){
+    fc.style.background = 'linear-gradient(135deg,rgba(26,188,156,0.12),rgba(13,27,42,0.9))';
+    fc.style.borderColor = 'rgba(26,188,156,0.25)';
+  } else {
+    fc.style.background = '';
+    fc.style.borderColor = '';
+  }
+  flipped = false;
+}
+
+function flipCard(){
+  if(!flipped){
+    document.getElementById('fc').classList.add('flipped');
+    document.getElementById('fc-hint').style.display = 'none';
+    document.getElementById('fc-actions-flip').style.display = 'none';
+    document.getElementById('fc-actions-judge').style.display = 'flex';
+    flipped = true;
+  }
+}
+function nextCard(result){
+  if(result==='ok') okCount++;
+  currentIdx++;
+  document.getElementById('fc-count').textContent = `${okCount} / ${totalCards} 枚`;
+  renderCard();
+}
+function switchSubject(subj,btn){
+  currentSubject = subj; currentIdx = 0;
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  okCount = Math.floor(Math.random()*25)+8;
+  totalCards = cards[subj].length * Math.floor(Math.random()*8+5);
+  document.getElementById('fc-count').textContent = `${okCount} / ${totalCards} 枚`;
+  renderCard();
+}
+
+// COUNTDOWN
+function updateCD(){
+  const target = new Date('2026-08-06T09:00:00');
+  const now = new Date();
+  const diff = target - now;
+  if(diff>0){
+    document.getElementById('cd-d').textContent = Math.floor(diff/86400000);
+    document.getElementById('cd-h').textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+    document.getElementById('cd-m').textContent = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+  }
+}
+updateCD(); setInterval(updateCD,30000);
+
+// CHAT
+function sendChat(){
+  const inp = document.getElementById('chat-in');
+  const txt = inp.value.trim(); if(!txt) return;
+  const wrap = document.getElementById('chat-wrap');
+  const ub = document.createElement('div'); ub.className='bubble b-user'; ub.textContent=txt;
+  wrap.appendChild(ub); inp.value = ''; wrap.scrollTop = wrap.scrollHeight;
+  setTimeout(()=>{
+    const ab = document.createElement('div'); ab.className='bubble b-ai';
+    const isInfo = txt.includes('情報') || txt.includes('プログラム') || txt.includes('デジタル');
+    ab.innerHTML = isInfo
+      ? '情報科目についてですね！令和8年度から必修となる重要な科目です。デジタルリテラシー・プログラミング基礎・データ分析が出題範囲です。<em style="color:var(--teal2);font-size:10px;"> — AI回答準備中…</em>'
+      : 'ご質問ありがとうございます！高認対策として重要なポイントですね。詳しく一緒に確認しましょう。<em style="color:var(--gold2);font-size:10px;"> — AI回答準備中…</em>';
+    wrap.appendChild(ab); wrap.scrollTop = wrap.scrollHeight;
+  },800);
+}
+document.getElementById('chat-in').addEventListener('keydown',e=>{if(e.key==='Enter')sendChat();});
+
+// MODAL DATA
+const modalDB = {
+  jpn:{title:'国語 — 単元一覧',sub:'現代文の読解力・古文単語・漢字語彙が得点の柱です。',units:[
+    {n:'01',t:'漢字・語彙（基礎）',m:'暗記カード 40枚',done:true},
+    {n:'02',t:'現代文 読解技法',m:'音声解説+テスト',done:true},
+    {n:'03',t:'古文単語100選',m:'暗記カード 100枚',done:true},
+    {n:'04',t:'古文 助動詞・助詞',m:'音声解説+テスト',active:true},
+    {n:'05',t:'現代文 論述・記述',m:'テスト演習'},
+    {n:'06',t:'古文 読解（過去問）',m:'実践演習'},
+  ]},
+  math:{title:'数学 — 単元一覧',sub:'計算力の徹底反復が最重要です。',units:[
+    {n:'01',t:'正負の数・四則演算',m:'暗記カード',done:true},
+    {n:'02',t:'展開・因数分解',m:'音声解説+テスト',done:true},
+    {n:'03',t:'一次方程式・連立',m:'テスト',done:true},
+    {n:'04',t:'二次方程式・解の公式',m:'音声解説+テスト',active:true},
+    {n:'05',t:'一次・二次関数',m:'グラフ演習'},
+    {n:'06',t:'図形・確率',m:'テスト演習'},
+  ]},
+  eng:{title:'英語 — 単元一覧',sub:'中学英語の完成が高認英語合格の近道です。',units:[
+    {n:'01',t:'英単語800',m:'暗記カード',done:true},
+    {n:'02',t:'基本文型・品詞',m:'暗記カード',done:true},
+    {n:'03',t:'時制',m:'音声解説+テスト',done:true},
+    {n:'04',t:'受動態・不定詞',m:'音声解説+テスト',done:true},
+    {n:'05',t:'関係代名詞・接続詞',m:'テスト',active:true},
+    {n:'06',t:'長文読解（過去問）',m:'実践演習'},
+  ]},
+  pub:{title:'公共 — 単元一覧',sub:'旧「現代社会」「倫理」「政治経済」を統合した科目です。',units:[
+    {n:'01',t:'日本国憲法・基本的人権',m:'暗記カード',done:true},
+    {n:'02',t:'三権分立・政治のしくみ',m:'音声解説+テスト',done:true},
+    {n:'03',t:'経済のしくみ・市場',m:'テスト',active:true},
+    {n:'04',t:'労働・社会保障',m:'テスト'},
+    {n:'05',t:'国際社会・倫理',m:'音声解説+テスト'},
+  ]},
+  info:{title:'情報 — 単元一覧（令和8年度〜 新必修）',sub:'大問5問・全21問（四択式）。インターネット・著作権・プログラミング・データ分析が出題範囲です。',units:[
+    {n:'01',t:'情報社会・デジタルリテラシー基礎',m:'暗記カード',active:true,isInfo:true},
+    {n:'02',t:'著作権・肖像権・情報モラル',m:'暗記カード+テスト',isInfo:true},
+    {n:'03',t:'WebページとHTMLの基礎',m:'音声解説+テスト',isInfo:true},
+    {n:'04',t:'プログラミング（変数・条件分岐・繰り返し）',m:'音声解説+テスト',isInfo:true},
+    {n:'05',t:'データ分析・グラフ読解',m:'実践演習',isInfo:true},
+  ]},
+  geo:{title:'地理（地理総合）— 単元一覧',sub:'地図・統計グラフの読み取り。気候区分の暗記が得点アップの近道です。',units:[
+    {n:'01',t:'地形・気候（世界）',m:'暗記カード',active:true},
+    {n:'02',t:'農業・工業・貿易',m:'テスト'},
+    {n:'03',t:'人口・都市・エネルギー',m:'統計読解'},
+    {n:'04',t:'日本地理（自然・産業）',m:'暗記カード+テスト'},
+    {n:'05',t:'地図・統計グラフ読解',m:'実践演習'},
+  ]},
+  hist:{title:'歴史（歴史総合）— 単元一覧',sub:'世界史＋日本史が統合された科目。近現代史（19〜20世紀）が出題の中心です。',units:[
+    {n:'01',t:'近代の始まり（18〜19世紀）',m:'暗記カード',done:true},
+    {n:'02',t:'帝国主義・第一次世界大戦',m:'音声解説+テスト',active:true},
+    {n:'03',t:'第二次世界大戦・日本の動向',m:'テスト'},
+    {n:'04',t:'冷戦・戦後の国際秩序',m:'暗記カード+テスト'},
+    {n:'05',t:'現代の課題と日本',m:'テスト'},
+  ]},
+  'sci-h':{title:'科学と人間生活 — 単元一覧',sub:'物理・化学・生物・地学の身近な応用。暗記中心で得点しやすい科目です。',units:[
+    {n:'01',t:'光・レンズ（物理）',m:'暗記カード',active:true},
+    {n:'02',t:'熱・エネルギー（物理）',m:'テスト'},
+    {n:'03',t:'金属・プラスチック（化学）',m:'暗記カード'},
+    {n:'04',t:'生命・DNA（生物）',m:'音声解説+テスト'},
+    {n:'05',t:'宇宙・地球の歴史（地学）',m:'暗記カード'},
+  ]},
+  bio:{title:'生物基礎 — 単元一覧',sub:'細胞・遺伝・体内環境・生態系。図解と暗記カードで視覚的に理解しましょう。',units:[
+    {n:'01',t:'細胞の構造・種類',m:'暗記カード',active:true},
+    {n:'02',t:'代謝・酵素',m:'テスト'},
+    {n:'03',t:'遺伝子・DNAの構造',m:'音声解説+テスト'},
+    {n:'04',t:'体内環境・免疫',m:'暗記カード+テスト'},
+    {n:'05',t:'生態系・バイオーム',m:'テスト'},
+  ]},
+  phy:{title:'物理基礎 — 単元一覧',sub:'力学・電気・磁気・波動。公式の暗記と計算力の両立が大切です。',units:[
+    {n:'01',t:'力・運動の法則',m:'暗記カード+テスト',active:true},
+    {n:'02',t:'エネルギーと仕事',m:'テスト'},
+    {n:'03',t:'電流・電圧・抵抗',m:'音声解説+テスト'},
+    {n:'04',t:'波動（音・光）',m:'暗記カード'},
+  ]},
+  chem:{title:'化学基礎 — 単元一覧',sub:'物質の構成・化学変化・イオン。反応式と計算の練習を重点的に。',units:[
+    {n:'01',t:'物質の構成・原子',m:'暗記カード',active:true},
+    {n:'02',t:'化学結合・物質の分類',m:'テスト'},
+    {n:'03',t:'酸・塩基・中和',m:'音声解説+テスト'},
+    {n:'04',t:'酸化・還元・イオン',m:'テスト'},
+  ]},
+  earth:{title:'地学基礎 — 単元一覧',sub:'地球・宇宙・気象・地質。暗記中心で理科の中では取り組みやすい科目です。',units:[
+    {n:'01',t:'地球の構造・プレート',m:'暗記カード',active:true},
+    {n:'02',t:'気象・大気の循環',m:'テスト'},
+    {n:'03',t:'岩石・地質年代',m:'暗記カード'},
+    {n:'04',t:'宇宙・太陽系',m:'音声解説+テスト'},
+  ]},
+};
+
+function openModal(key){
+  const d = modalDB[key]; if(!d) return;
+  document.getElementById('m-title').textContent = d.title;
+  document.getElementById('m-sub').textContent = d.sub;
+  document.getElementById('m-units').innerHTML = d.units.map(u=>`
+    <div class="unit-item ${u.done?'done':''} ${u.active?'active':''} ${u.isInfo?'info-unit':''}">
+      <div class="ui-num">${u.done?'✓':u.active?'▶':u.n}</div>
+      <div class="ui-info">
+        <div class="ui-title">${u.t}</div>
+        <div class="ui-meta">${u.m}</div>
+      </div>
+      <span class="ui-badge ${u.m.includes('音声')?'voice':u.m.includes('テスト')?'test':''} ${u.isInfo?'new-content':''}">${u.done?'完了':u.active?'学習中':'未着手'}</span>
+    </div>
+  `).join('');
+  document.getElementById('overlay').classList.add('show');
+}
+function closeModal(){document.getElementById('overlay').classList.remove('show');}
+function closeOverlay(e){if(e.target.id==='overlay')closeModal();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+// NAV
+document.querySelectorAll('.hn').forEach(b=>{b.addEventListener('click',function(){document.querySelectorAll('.hn').forEach(x=>x.classList.remove('on'));this.classList.add('on');});});
+
+// Progress bar animation
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.prog-fill').forEach(bar=>{
+        const w=bar.style.width; bar.style.width='0';
+        setTimeout(()=>{bar.style.width=w;},150);
+      });
+      io.unobserve(e.target);
+    }
+  });
+},{threshold:0.15});
+document.querySelectorAll('.subjects-top-row,.subjects-mid-row').forEach(el=>io.observe(el));
+
+renderCard();
+</script>
+</body>
+</html>
