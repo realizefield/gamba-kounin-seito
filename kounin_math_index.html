@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>高認数学 単元一覧 | GAMBA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+:root{
+  --bg:#f0f4f8;
+  --card:#ffffff;
+  --text:#1e293b;
+  --muted:#64748b;
+  --border:#e2e8f0;
+
+  /* 各章テーマ色 */
+  --ef:#0f766e;   --ef-l:#f0fdfa;   --ef-b:#99f6e4;
+  --in:#1d4ed8;   --in-l:#eff6ff;   --in-b:#bfdbfe;
+  --st:#059669;   --st-l:#f0fdf4;   --st-b:#a7f3d0;
+  --qu:#d97706;   --qu-l:#fffbeb;   --qu-b:#fde68a;
+
+  --purple:#9333ea; --purple-l:#faf5ff;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'BIZ UDPGothic',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  font-size:15px;
+  line-height:1.7;
+  padding-bottom:60px;
+}
+
+/* ── ヘッダー ── */
+.site-header{
+  background:linear-gradient(135deg,#0f766e 0%,#1d4ed8 100%);
+  color:#fff;
+  padding:22px 20px 18px;
+  text-align:center;
+}
+.site-header .logo{font-size:13px;opacity:.8;letter-spacing:.1em;margin-bottom:4px}
+.site-header h1{font-size:22px;font-weight:700;letter-spacing:.05em}
+.site-header p{font-size:13px;opacity:.85;margin-top:4px}
+
+/* ── メニューへ戻るリンク ── */
+.back-link{
+  display:flex;align-items:center;gap:6px;
+  padding:10px 16px;
+  font-size:13px;color:var(--muted);
+  text-decoration:none;
+  border-bottom:1px solid var(--border);
+  background:#fff;
+}
+.back-link:hover{color:#0f766e}
+
+/* ── 使い方バナー ── */
+.howto{
+  margin:16px 16px 0;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:12px 14px;
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.7;
+}
+.howto strong{color:var(--text)}
+
+/* ── 章ブロック ── */
+.chapter{margin:20px 16px 0}
+.chapter-header{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:10px;
+}
+.chapter-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:32px;height:32px;border-radius:50%;
+  font-size:14px;font-weight:700;color:#fff;flex-shrink:0;
+}
+.chapter-title{font-size:16px;font-weight:700}
+.chapter-sub{font-size:12px;color:var(--muted);margin-top:1px}
+
+/* ── 単元カード ── */
+.unit-list{display:flex;flex-direction:column;gap:8px}
+
+.unit-card{
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  padding:12px 14px;
+  text-decoration:none;
+  color:var(--text);
+  transition:transform .15s, box-shadow .15s, border-color .15s;
+}
+.unit-card:hover{
+  transform:translateY(-1px);
+  box-shadow:0 4px 16px rgba(0,0,0,.08);
+}
+.unit-card:active{transform:translateY(0)}
+
+/* テーマ別ボーダー */
+.unit-card.ef{border-left:4px solid var(--ef)}
+.unit-card.in{border-left:4px solid var(--in)}
+.unit-card.st{border-left:4px solid var(--st)}
+.unit-card.qu{border-left:4px solid var(--qu)}
+.unit-card.kakomon{border-left:4px solid var(--purple)}
+
+.unit-card:hover.ef{border-color:var(--ef);background:var(--ef-l)}
+.unit-card:hover.in{border-color:var(--in);background:var(--in-l)}
+.unit-card:hover.st{border-color:var(--st);background:var(--st-l)}
+.unit-card:hover.qu{border-color:var(--qu);background:var(--qu-l)}
+.unit-card:hover.kakomon{border-color:var(--purple);background:var(--purple-l)}
+
+/* コードバッジ */
+.unit-code{
+  flex-shrink:0;
+  font-size:11px;font-weight:700;
+  padding:3px 8px;
+  border-radius:6px;
+  letter-spacing:.05em;
+  min-width:52px;text-align:center;
+}
+.code-ef{background:var(--ef-l);color:var(--ef);border:1px solid var(--ef-b)}
+.code-in{background:var(--in-l);color:var(--in);border:1px solid var(--in-b)}
+.code-st{background:var(--st-l);color:var(--st);border:1px solid var(--st-b)}
+.code-qu{background:var(--qu-l);color:var(--qu);border:1px solid var(--qu-b)}
+.code-kakomon{background:var(--purple-l);color:var(--purple);border:1px solid #e9d5ff}
+
+/* テキスト部分 */
+.unit-info{flex:1;min-width:0}
+.unit-name{font-size:14px;font-weight:700;line-height:1.4}
+.unit-sub{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* ページ数タグ */
+.unit-pages{
+  flex-shrink:0;
+  font-size:11px;color:var(--muted);
+  display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end;
+}
+.page-tag{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:1px 5px;
+  font-size:10px;
+}
+
+/* 矢印 */
+.unit-arrow{color:#cbd5e1;font-size:18px;flex-shrink:0;margin-left:4px}
+.unit-card:hover .unit-arrow{color:var(--muted)}
+
+/* kakomon注記 */
+.kakomon-note{
+  font-size:11px;
+  color:var(--purple);
+  background:var(--purple-l);
+  border:1px solid #e9d5ff;
+  border-radius:6px;
+  padding:2px 7px;
+  margin-top:4px;
+  display:inline-block;
+}
+
+/* ── 区切り線 ── */
+.divider{height:1px;background:var(--border);margin:4px 0}
+
+/* ── フッター ── */
+.footer{
+  text-align:center;
+  font-size:12px;
+  color:var(--muted);
+  padding:24px 16px;
+}
+
+/* ── howto ABC説明 ── */
+.howto-abc{
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px solid var(--border);
+}
+.howto-abc-title{font-weight:700;color:var(--text);margin-bottom:6px;font-size:13px}
+.howto-abc-row{
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;color:var(--text);
+  margin-bottom:4px;
+}
+.abc-demo{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:6px;
+  font-size:11px;font-weight:700;flex-shrink:0;color:#fff;
+}
+.abc-demo.a{background:#059669}
+.abc-demo.b{background:#d97706}
+.abc-demo.c{background:#dc2626}
+.howto-abc-note{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* ── A/B/C チェックボタン ── */
+.check-btns{
+  display:flex;flex-direction:column;gap:4px;flex-shrink:0;margin-left:6px;
+}
+.chk{
+  width:28px;height:28px;border-radius:8px;border:2px solid var(--border);
+  background:#fff;font-size:11px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:.15s;font-family:inherit;color:var(--muted);
+  -webkit-tap-highlight-color:transparent;
+}
+.chk:hover{border-color:#94a3b8}
+.chk.active-a{background:#059669;border-color:#059669;color:#fff}
+.chk.active-b{background:#d97706;border-color:#d97706;color:#fff}
+.chk.active-c{background:#dc2626;border-color:#dc2626;color:#fff}
+
+/* カード左端にステータス色帯 */
+.unit-card[data-status="A"]{background:linear-gradient(to right,#f0fdf4 0%,#fff 40px)}
+.unit-card[data-status="B"]{background:linear-gradient(to right,#fffbeb 0%,#fff 40px)}
+.unit-card[data-status="C"]{background:linear-gradient(to right,#fef2f2 0%,#fff 40px)}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo">🎯 GAMBA 高認対策</div>
+  <h1>高認数学 単元一覧</h1>
+  <p>やさしい順に取り組もう。確認テストで合格を目指せ！</p>
+</header>
+
+<a class="back-link" href="../gamba_kounin.html">← メインメニューへ</a>
+
+<div class="howto">
+  <strong>📌 使い方</strong>　各単元をタップして学習を始めましょう。<br>
+  <strong>導入 → 例題 → 演習 → 確認テスト</strong> の順に進むと理解が深まります。<br>
+  確認テストで合格したら次の単元へ進もう！
+  <div class="howto-abc">
+    <div class="howto-abc-title">📝 学習チェックボタンの使い方</div>
+    <div class="howto-abc-row"><span class="abc-demo a">A</span><span>わかった ── 自信を持って解けた！</span></div>
+    <div class="howto-abc-row"><span class="abc-demo b">B</span><span>要復習 ── なんとなくわかったが、もう一度やりたい</span></div>
+    <div class="howto-abc-row"><span class="abc-demo c">C</span><span>何度も復習 ── まだよくわからない。くり返し取り組もう</span></div>
+    <div class="howto-abc-note">※ もう一度タップすると取り消せます</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════ -->
+<!--  第1章 式の計算                 -->
+<!-- ═══════════════════════════════ -->
+<div class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-badge" style="background:var(--ef)">1</div>
+    <div>
+      <div class="chapter-title">式の計算（展開と因数分解）</div>
+      <div class="chapter-sub">EFシリーズ ── 展開・因数分解・たすき掛け・過去問</div>
+    </div>
+  </div>
+
+  <div class="unit-list">
+
+    <a href="EF10/intro.html" class="unit-card ef" data-unit="EF10">
+      <span class="unit-code code-ef">EF10</span>
+      <div class="unit-info">
+        <div class="unit-name">展開公式①</div>
+        <div class="unit-sub">$(ax+b)(cx+d)$ の展開・外×外＋内×内</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="EF10" onclick="setStatus(this,'EF10','A')">A</button>
+        <button class="chk btn-b" data-unit="EF10" onclick="setStatus(this,'EF10','B')">B</button>
+        <button class="chk btn-c" data-unit="EF10" onclick="setStatus(this,'EF10','C')">C</button>
+      </div>
+    </a>
+
+    <a href="EF11/intro.html" class="unit-card ef" data-unit="EF11">
+      <span class="unit-code code-ef">EF11</span>
+      <div class="unit-info">
+        <div class="unit-name">たすき掛け（両プラス）</div>
+        <div class="unit-sub">$2x^2+5x+3$ タイプの因数分解</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="EF11" onclick="setStatus(this,'EF11','A')">A</button>
+        <button class="chk btn-b" data-unit="EF11" onclick="setStatus(this,'EF11','B')">B</button>
+        <button class="chk btn-c" data-unit="EF11" onclick="setStatus(this,'EF11','C')">C</button>
+      </div>
+    </a>
+
+    <a href="EF12/intro.html" class="unit-card ef" data-unit="EF12">
+      <span class="unit-code code-ef">EF12</span>
+      <div class="unit-info">
+        <div class="unit-name">たすき掛け（両マイナス）</div>
+        <div class="unit-sub">$6x^2-7x+2$ タイプの因数分解</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="EF12" onclick="setStatus(this,'EF12','A')">A</button>
+        <button class="chk btn-b" data-unit="EF12" onclick="setStatus(this,'EF12','B')">B</button>
+        <button class="chk btn-c" data-unit="EF12" onclick="setStatus(this,'EF12','C')">C</button>
+      </div>
+    </a>
+
+    <a href="EF13/intro.html" class="unit-card ef" data-unit="EF13">
+      <span class="unit-code code-ef">EF13</span>
+      <div class="unit-info">
+        <div class="unit-name">たすき掛け（符号が逆）</div>
+        <div class="unit-sub">$3x^2+5x-2$ タイプ ── 高認最頻出！</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="EF13" onclick="setStatus(this,'EF13','A')">A</button>
+        <button class="chk btn-b" data-unit="EF13" onclick="setStatus(this,'EF13','B')">B</button>
+        <button class="chk btn-c" data-unit="EF13" onclick="setStatus(this,'EF13','C')">C</button>
+      </div>
+    </a>
+
+    <a href="EF14/intro.html" class="unit-card kakomon" data-unit="EF14">
+      <span class="unit-code code-kakomon">EF14</span>
+      <div class="unit-info">
+        <div class="unit-name">過去問・判別練習</div>
+        <div class="unit-sub">どの公式を使うか？R4〜R7 全問演習</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">判別</span><span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="EF14" onclick="setStatus(this,'EF14','A')">A</button>
+        <button class="chk btn-b" data-unit="EF14" onclick="setStatus(this,'EF14','B')">B</button>
+        <button class="chk btn-c" data-unit="EF14" onclick="setStatus(this,'EF14','C')">C</button>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════ -->
+<!--  第2章 不等式                   -->
+<!-- ═══════════════════════════════ -->
+<div class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-badge" style="background:var(--in)">2</div>
+    <div>
+      <div class="chapter-title">不等式</div>
+      <div class="chapter-sub">INシリーズ ── 解き方・計算過去問・文章題</div>
+    </div>
+  </div>
+
+  <div class="unit-list">
+
+    <a href="IN01/intro.html" class="unit-card in" data-unit="IN01">
+      <span class="unit-code code-in">IN01</span>
+      <div class="unit-info">
+        <div class="unit-name">不等式の基礎</div>
+        <div class="unit-sub">不等号の意味・数直線・両辺の性質</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="IN01" onclick="setStatus(this,'IN01','A')">A</button>
+        <button class="chk btn-b" data-unit="IN01" onclick="setStatus(this,'IN01','B')">B</button>
+        <button class="chk btn-c" data-unit="IN01" onclick="setStatus(this,'IN01','C')">C</button>
+      </div>
+    </a>
+
+    <a href="IN02/intro.html" class="unit-card in" data-unit="IN02">
+      <span class="unit-code code-in">IN02</span>
+      <div class="unit-info">
+        <div class="unit-name">不等式の解き方①</div>
+        <div class="unit-sub">移項・両辺操作・基本パターン</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="IN02" onclick="setStatus(this,'IN02','A')">A</button>
+        <button class="chk btn-b" data-unit="IN02" onclick="setStatus(this,'IN02','B')">B</button>
+        <button class="chk btn-c" data-unit="IN02" onclick="setStatus(this,'IN02','C')">C</button>
+      </div>
+    </a>
+
+    <a href="IN03/intro.html" class="unit-card in" data-unit="IN03">
+      <span class="unit-code code-in">IN03</span>
+      <div class="unit-info">
+        <div class="unit-name">不等式の解き方②</div>
+        <div class="unit-sub">両辺に文字・分数・小数・負の数での反転</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="IN03" onclick="setStatus(this,'IN03','A')">A</button>
+        <button class="chk btn-b" data-unit="IN03" onclick="setStatus(this,'IN03','B')">B</button>
+        <button class="chk btn-c" data-unit="IN03" onclick="setStatus(this,'IN03','C')">C</button>
+      </div>
+    </a>
+
+    <a href="IN04/practice.html" class="unit-card kakomon" data-unit="IN04">
+      <span class="unit-code code-kakomon">IN04</span>
+      <div class="unit-info">
+        <div class="unit-name">計算過去問演習</div>
+        <div class="unit-sub">R4〜R7 不等式計算問題・年度別演習</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="IN04" onclick="setStatus(this,'IN04','A')">A</button>
+        <button class="chk btn-b" data-unit="IN04" onclick="setStatus(this,'IN04','B')">B</button>
+        <button class="chk btn-c" data-unit="IN04" onclick="setStatus(this,'IN04','C')">C</button>
+      </div>
+    </a>
+
+    <a href="IN05/intro.html" class="unit-card kakomon" data-unit="IN05">
+      <span class="unit-code code-kakomon">IN05</span>
+      <div class="unit-info">
+        <div class="unit-name">文章題①（限定配信）</div>
+        <div class="unit-sub">合計購入型・最頻出パターン</div>
+        <span class="kakomon-note">🔒 対面指導生徒・限定配信</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="IN05" onclick="setStatus(this,'IN05','A')">A</button>
+        <button class="chk btn-b" data-unit="IN05" onclick="setStatus(this,'IN05','B')">B</button>
+        <button class="chk btn-c" data-unit="IN05" onclick="setStatus(this,'IN05','C')">C</button>
+      </div>
+    </a>
+
+    <a href="IN06/intro.html" class="unit-card kakomon" data-unit="IN06">
+      <span class="unit-code code-kakomon">IN06</span>
+      <div class="unit-info">
+        <div class="unit-name">文章題②（限定配信）</div>
+        <div class="unit-sub">時間比較型・その他応用パターン</div>
+        <span class="kakomon-note">🔒 対面指導生徒・限定配信</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="IN06" onclick="setStatus(this,'IN06','A')">A</button>
+        <button class="chk btn-b" data-unit="IN06" onclick="setStatus(this,'IN06','B')">B</button>
+        <button class="chk btn-c" data-unit="IN06" onclick="setStatus(this,'IN06','C')">C</button>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════ -->
+<!--  第3章 集合・命題               -->
+<!-- ═══════════════════════════════ -->
+<div class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-badge" style="background:var(--st)">3</div>
+    <div>
+      <div class="chapter-title">集合・命題</div>
+      <div class="chapter-sub">STシリーズ ── 集合・ベン図・命題と真偽</div>
+    </div>
+  </div>
+
+  <div class="unit-list">
+
+    <a href="ST01/intro.html" class="unit-card st" data-unit="ST01">
+      <span class="unit-code code-st">ST01</span>
+      <div class="unit-info">
+        <div class="unit-name">集合の基礎</div>
+        <div class="unit-sub">要素・共通部分・和集合・補集合・ベン図</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="ST01" onclick="setStatus(this,'ST01','A')">A</button>
+        <button class="chk btn-b" data-unit="ST01" onclick="setStatus(this,'ST01','B')">B</button>
+        <button class="chk btn-c" data-unit="ST01" onclick="setStatus(this,'ST01','C')">C</button>
+      </div>
+    </a>
+
+    <a href="ST01_kakomon/practice.html" class="unit-card kakomon" data-unit="ST01_kakomon">
+      <span class="unit-code code-kakomon">ST01</span>
+      <div class="unit-info">
+        <div class="unit-name">集合 過去問演習</div>
+        <div class="unit-sub">R4〜R7 ベン図・集合演算の実戦問題</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="ST01_kakomon" onclick="setStatus(this,'ST01_kakomon','A')">A</button>
+        <button class="chk btn-b" data-unit="ST01_kakomon" onclick="setStatus(this,'ST01_kakomon','B')">B</button>
+        <button class="chk btn-c" data-unit="ST01_kakomon" onclick="setStatus(this,'ST01_kakomon','C')">C</button>
+      </div>
+    </a>
+
+    <a href="ST02/intro.html" class="unit-card st" data-unit="ST02">
+      <span class="unit-code code-st">ST02</span>
+      <div class="unit-info">
+        <div class="unit-name">命題と真偽</div>
+        <div class="unit-sub">「ならば」の構造・真か偽かの判定・過去問統合</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="ST02" onclick="setStatus(this,'ST02','A')">A</button>
+        <button class="chk btn-b" data-unit="ST02" onclick="setStatus(this,'ST02','B')">B</button>
+        <button class="chk btn-c" data-unit="ST02" onclick="setStatus(this,'ST02','C')">C</button>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════ -->
+<!--  第4章 二次関数                 -->
+<!-- ═══════════════════════════════ -->
+<div class="chapter">
+  <div class="chapter-header">
+    <div class="chapter-badge" style="background:var(--qu)">4</div>
+    <div>
+      <div class="chapter-title">二次関数</div>
+      <div class="chapter-sub">QUシリーズ ── グラフ・平方完成・様々な問題・過去問</div>
+    </div>
+  </div>
+
+  <div class="unit-list">
+
+    <a href="QU00/intro.html" class="unit-card qu" data-unit="QU00">
+      <span class="unit-code code-qu">QU00</span>
+      <div class="unit-info">
+        <div class="unit-name">座標と放物線の基礎</div>
+        <div class="unit-sub">座標とは・x軸y軸・$y=ax^2$ のグラフ</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="QU00" onclick="setStatus(this,'QU00','A')">A</button>
+        <button class="chk btn-b" data-unit="QU00" onclick="setStatus(this,'QU00','B')">B</button>
+        <button class="chk btn-c" data-unit="QU00" onclick="setStatus(this,'QU00','C')">C</button>
+      </div>
+    </a>
+
+    <a href="QU01/intro.html" class="unit-card qu" data-unit="QU01">
+      <span class="unit-code code-qu">QU01</span>
+      <div class="unit-info">
+        <div class="unit-name">グラフの形と頂点座標</div>
+        <div class="unit-sub">上凸・下凸・開き具合・$y=a(x-p)^2+q$ の頂点</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="QU01" onclick="setStatus(this,'QU01','A')">A</button>
+        <button class="chk btn-b" data-unit="QU01" onclick="setStatus(this,'QU01','B')">B</button>
+        <button class="chk btn-c" data-unit="QU01" onclick="setStatus(this,'QU01','C')">C</button>
+      </div>
+    </a>
+
+    <a href="QU02/intro.html" class="unit-card qu" data-unit="QU02">
+      <span class="unit-code code-qu">QU02</span>
+      <div class="unit-info">
+        <div class="unit-name">平行移動</div>
+        <div class="unit-sub">$x$ 軸方向・$y$ 軸方向への移動と式の変化</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="QU02" onclick="setStatus(this,'QU02','A')">A</button>
+        <button class="chk btn-b" data-unit="QU02" onclick="setStatus(this,'QU02','B')">B</button>
+        <button class="chk btn-c" data-unit="QU02" onclick="setStatus(this,'QU02','C')">C</button>
+      </div>
+    </a>
+
+    <a href="QU03/intro.html" class="unit-card qu" data-unit="QU03">
+      <span class="unit-code code-qu">QU03</span>
+      <div class="unit-info">
+        <div class="unit-name">平方完成</div>
+        <div class="unit-sub">4ステップで頂点座標を求める・最頻出！</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="QU03" onclick="setStatus(this,'QU03','A')">A</button>
+        <button class="chk btn-b" data-unit="QU03" onclick="setStatus(this,'QU03','B')">B</button>
+        <button class="chk btn-c" data-unit="QU03" onclick="setStatus(this,'QU03','C')">C</button>
+      </div>
+    </a>
+
+    <a href="QU04/intro.html" class="unit-card qu" data-unit="QU04">
+      <span class="unit-code code-qu">QU04</span>
+      <div class="unit-info">
+        <div class="unit-name">様々な問題</div>
+        <div class="unit-sub">点を代入してaの値・頂点と通る点から式を決める</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="QU04" onclick="setStatus(this,'QU04','A')">A</button>
+        <button class="chk btn-b" data-unit="QU04" onclick="setStatus(this,'QU04','B')">B</button>
+        <button class="chk btn-c" data-unit="QU04" onclick="setStatus(this,'QU04','C')">C</button>
+      </div>
+    </a>
+
+    <a href="QU05/intro.html" class="unit-card qu" data-unit="QU05">
+      <span class="unit-code code-qu">QU05</span>
+      <div class="unit-info">
+        <div class="unit-name">二次関数の識別</div>
+        <div class="unit-sub">どれが二次関数か・上下の開き方を判断する</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="QU05" onclick="setStatus(this,'QU05','A')">A</button>
+        <button class="chk btn-b" data-unit="QU05" onclick="setStatus(this,'QU05','B')">B</button>
+        <button class="chk btn-c" data-unit="QU05" onclick="setStatus(this,'QU05','C')">C</button>
+      </div>
+    </a>
+
+    <a href="QU05/practice.html" class="unit-card kakomon" data-unit="QU05K">
+      <span class="unit-code code-kakomon">QU05</span>
+      <div class="unit-info">
+        <div class="unit-name">二次関数 過去問演習</div>
+        <div class="unit-sub">R4〜R7 全8回・年度別で実戦演習</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">演習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="QU05K" onclick="setStatus(this,'QU05K','A')">A</button>
+        <button class="chk btn-b" data-unit="QU05K" onclick="setStatus(this,'QU05K','B')">B</button>
+        <button class="chk btn-c" data-unit="QU05K" onclick="setStatus(this,'QU05K','C')">C</button>
+      </div>
+    </a>
+
+    <a href="QU06/intro.html" class="unit-card qu" data-unit="QU06">
+      <span class="unit-code code-qu">QU06</span>
+      <div class="unit-info">
+        <div class="unit-name">変域あり最大・最小値</div>
+        <div class="unit-sub">頂点が変域の中か外か・場合分けで求める</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">例題</span><span class="page-tag">練習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="QU06" onclick="setStatus(this,'QU06','A')">A</button>
+        <button class="chk btn-b" data-unit="QU06" onclick="setStatus(this,'QU06','B')">B</button>
+        <button class="chk btn-c" data-unit="QU06" onclick="setStatus(this,'QU06','C')">C</button>
+      </div>
+    </a>
+
+    <a href="QU07/intro.html" class="unit-card qu" data-unit="QU07">
+      <span class="unit-code code-qu">QU07</span>
+      <div class="unit-info">
+        <div class="unit-name">x軸との共有点の座標</div>
+        <div class="unit-sub">y=0を代入・因数分解・たすき掛け・解の公式</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">例題</span><span class="page-tag">練習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="QU07" onclick="setStatus(this,'QU07','A')">A</button>
+        <button class="chk btn-b" data-unit="QU07" onclick="setStatus(this,'QU07','B')">B</button>
+        <button class="chk btn-c" data-unit="QU07" onclick="setStatus(this,'QU07','C')">C</button>
+      </div>
+    </a>
+
+    <a href="QU08/intro.html" class="unit-card qu" data-unit="QU08">
+      <span class="unit-code code-qu">QU08</span>
+      <div class="unit-info">
+        <div class="unit-name">判別式</div>
+        <div class="unit-sub">D=b²−4ac の符号でx軸との共有点の個数を判断</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">例題</span><span class="page-tag">練習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="QU08" onclick="setStatus(this,'QU08','A')">A</button>
+        <button class="chk btn-b" data-unit="QU08" onclick="setStatus(this,'QU08','B')">B</button>
+        <button class="chk btn-c" data-unit="QU08" onclick="setStatus(this,'QU08','C')">C</button>
+      </div>
+    </a>
+
+    <a href="QU09/intro.html" class="unit-card qu" data-unit="QU09">
+      <span class="unit-code code-qu">QU09</span>
+      <div class="unit-info">
+        <div class="unit-name">2次不等式</div>
+        <div class="unit-sub">内側・外側のルール・8回中7回出題の最重要単元</div>
+      </div>
+      <div class="unit-pages">
+        <span class="page-tag">導入</span><span class="page-tag">例題</span><span class="page-tag">練習</span><span class="page-tag">確認</span>
+      </div>
+      <span class="unit-arrow">›</span>
+      <div class="check-btns" onclick="event.preventDefault()">
+        <button class="chk btn-a" data-unit="QU09" onclick="setStatus(this,'QU09','A')">A</button>
+        <button class="chk btn-b" data-unit="QU09" onclick="setStatus(this,'QU09','B')">B</button>
+        <button class="chk btn-c" data-unit="QU09" onclick="setStatus(this,'QU09','C')">C</button>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+
+<div class="footer">
+  江原予備校 GAMBA 高認対策 数学<br>
+  わからないときは先生に相談しよう 📞
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script>
+// $...$ をKaTeXでレンダリング
+function renderMath() {
+  document.querySelectorAll('.unit-sub').forEach(el => {
+    el.innerHTML = el.innerHTML.replace(/\$([^$]+)\$/g, (_, m) => {
+      try {
+        return katex.renderToString(m, {throwOnError: false, displayMode: false});
+      } catch(e) { return '$' + m + '$'; }
+    });
+  });
+}
+
+// ── A/B/C チェック機能 ──
+function setStatus(btn, unitId, status) {
+  var key = 'kounin_math_' + unitId;
+  var current = localStorage.getItem(key);
+  // 同じボタンを再度押したらリセット
+  if (current === status) {
+    localStorage.removeItem(key);
+    applyStatus(unitId, null);
+  } else {
+    localStorage.setItem(key, status);
+    applyStatus(unitId, status);
+  }
+}
+
+function applyStatus(unitId, status) {
+  var card = document.querySelector('.unit-card[data-unit="' + unitId + '"]');
+  if (!card) return;
+  card.setAttribute('data-status', status || '');
+  ['A','B','C'].forEach(function(s) {
+    var b = card.querySelector('.btn-' + s.toLowerCase());
+    if (b) b.classList.toggle('active-' + s.toLowerCase(), status === s);
+  });
+}
+
+function loadAllStatus() {
+  document.querySelectorAll('.unit-card[data-unit]').forEach(function(card) {
+    var unitId = card.getAttribute('data-unit');
+    var status = localStorage.getItem('kounin_math_' + unitId);
+    if (status) applyStatus(unitId, status);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  renderMath();
+  loadAllStatus();
+});
+</script>
+</body>
+</html>
