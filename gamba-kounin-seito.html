@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0054)file:///C:/Users/kogen/Downloads/gambakouninseito.html -->
+<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GAMBAシステム 高認生徒版｜江原予備校</title>
 <style>
@@ -142,16 +142,70 @@
   .cta-btn:hover { opacity: 0.85; }
 
   footer { text-align: center; padding: 24px; font-size: 0.72rem; color: var(--muted); border-top: 1px solid #e0e0e0; margin-top: 40px; }
+
+  /* ===== パスワード保護オーバーレイ ===== */
+  #pw-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+  }
+  #pw-box {
+    background: white; border-radius: 16px; padding: 40px 32px;
+    text-align: center; width: 90%; max-width: 380px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+  }
+  #pw-logo { font-size: 2rem; font-weight: 700; letter-spacing: 0.2em; color: var(--navy); margin-bottom: 4px; }
+  #pw-subtitle { font-size: 0.78rem; color: var(--muted); margin-bottom: 24px; letter-spacing: 0.1em; }
+  .pw-label { font-size: 0.78rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; display: block; text-align: left; }
+  .pw-input {
+    width: 100%; padding: 12px 16px; border: 2px solid #ddd; border-radius: 8px;
+    font-size: 1rem; font-family: inherit; outline: none;
+    letter-spacing: 0.05em; transition: border-color 0.2s; margin-bottom: 12px;
+  }
+  .pw-input:focus { border-color: var(--navy); }
+  .pw-input.error { border-color: #e53e3e; animation: shake 0.3s ease; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+  #pw-btn {
+    width: 100%; padding: 12px; background: var(--orange); color: white;
+    border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 700;
+    font-family: inherit; cursor: pointer; transition: opacity 0.2s;
+  }
+  #pw-btn:hover { opacity: 0.85; }
+  #pw-error { color: #e53e3e; font-size: 0.78rem; margin-top: 10px; display: none; font-weight: 700; }
+  #pw-badge { width: 56px; height: 56px; margin: 0 auto 16px; }
 </style>
 </head>
 <body>
+
+<!-- ===== パスワードオーバーレイ ===== -->
+<div id="pw-overlay">
+  <div id="pw-box">
+    <svg id="pw-badge" viewBox="0 0 48 48">
+      <polygon points="24,3 42,13 42,35 24,45 6,35 6,13" fill="#eef2f8" stroke="#1a3a6b" stroke-width="1.5"></polygon>
+      <text x="24" y="30" text-anchor="middle" font-family="&#39;Noto Sans JP&#39;,sans-serif" font-size="18" font-weight="700" fill="#1a3a6b">G</text>
+    </svg>
+    <div id="pw-logo">GAMBA</div>
+    <div id="pw-subtitle">高卒認定試験 生徒専用ページ</div>
+    <label class="pw-label" for="id-input">🎓 生徒ID</label>
+    <input id="id-input" class="pw-input" type="text" placeholder="例）KOU2-2026-001" autocomplete="off">
+    <label class="pw-label" for="pw-input">🔒 パスワード</label>
+    <input id="pw-input" class="pw-input" type="password" placeholder="パスワード" autocomplete="off">
+    <button id="pw-btn" onclick="checkPassword()">ログイン</button>
+    <div id="pw-error">IDまたはパスワードが違います。もう一度お試しください。</div>
+  </div>
+</div>
+
+<!-- ===== ウェルカムバー ===== -->
+<div id="welcome-bar" style="display:none; background:var(--gold); color:#1a3a6b; text-align:center; padding:10px 16px; font-size:0.88rem; font-weight:700;">
+  👋 <span id="welcome-name"></span>さん、こんにちは！今日も一緒にがんばろう🌟
+</div>
 
 <!-- ===== ヒーロー ===== -->
 <div class="hero">
   <div class="logo-wrap">
     <svg class="logo-badge" viewBox="0 0 48 48">
-      <polygon points="24,3 42,13 42,35 24,45 6,35 6,13" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.5)" stroke-width="1"/>
-      <text x="24" y="30" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="18" font-weight="700" fill="white">G</text>
+      <polygon points="24,3 42,13 42,35 24,45 6,35 6,13" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.5)" stroke-width="1"></polygon>
+      <text x="24" y="30" text-anchor="middle" font-family="&#39;Noto Sans JP&#39;,sans-serif" font-size="18" font-weight="700" fill="white">G</text>
     </svg>
     <span class="logo-name">GAMBA</span>
   </div>
@@ -371,7 +425,7 @@
     </a>
 
     <!-- 地理 -->
-    <a class="subject-card c-chiri card-coming" href="#">
+    <a class="subject-card c-chiri card-coming" href="file:///C:/Users/kogen/Downloads/gambakouninseito.html#">
       <div class="card-top">
         <div class="card-emoji">🌏</div>
         <div class="card-info">
@@ -440,7 +494,7 @@
           <div class="card-level">⭐ 高認 情報1対応</div>
         </div>
       </div>
-      <div class="card-desc">教科書5章を全54単元に分け、穴埋め・4択・〇×・確認・練習・演習の6モードで学習。ビット&バイトから情報量計算まで、当校テキスト準拠でしっかり身につけよう。</div>
+      <div class="card-desc">教科書5章を全54単元に分け、穴埋め・4択・〇×・確認・練習・演習の6モードで学習。ビット&amp;バイトから情報量計算まで、当校テキスト準拠でしっかり身につけよう。</div>
       <div class="card-units">
         <span class="unit-tag">①情報社会</span>
         <span class="unit-tag">②コミュニケーション</span>
@@ -529,4 +583,77 @@
 <footer>
   © 江原予備校 / 株式会社 アイラコーポレーション<br>
   〒862-0950　熊本市中央区水前寺3丁目1-3<br>
-  TEL：096-382-6761　｜　Mail：<a href="/cdn-cgi/l/email-protection" class="__cf
+  TEL：096-382-6761　｜　Mail：kogentext@gmail.com
+</footer>
+
+<script>
+/* ===== 生徒マスタ（KOU2-2026-001形式） ===== */
+/* ↓ 実際の生徒名に書き換えてください。追加する場合は同じ形式で行を追加してください。 */
+var STUDENTS = {
+  'KOU2-2026-001': '田中',
+  'KOU2-2026-002': '鈴木',
+  'KOU2-2026-003': '佐藤',
+  'KOU2-2026-004': '山田',
+  'KOU2-2026-005': '中村',
+  'KOU2-2026-006': '伊藤',
+  'KOU2-2026-007': '渡辺',
+  'KOU2-2026-008': '加藤',
+  /* 'KOU2-2026-009': '〇〇', ← このように追加できます */
+};
+var PASSWORD = 'gamba2026';
+
+(function() {
+  var auth = localStorage.getItem('gamba_kounin_auth');
+  var name = localStorage.getItem('gamba_kounin_name');
+  if (auth === 'ok') {
+    document.getElementById('pw-overlay').style.display = 'none';
+    showWelcome(name);
+  }
+  document.getElementById('pw-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') checkPassword();
+  });
+  document.getElementById('id-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') document.getElementById('pw-input').focus();
+  });
+})();
+
+function showWelcome(name) {
+  if (!name) return;
+  document.getElementById('welcome-name').textContent = name;
+  document.getElementById('welcome-bar').style.display = 'block';
+}
+
+function checkPassword() {
+  var idInput  = document.getElementById('id-input');
+  var pwInput  = document.getElementById('pw-input');
+  var errorDiv = document.getElementById('pw-error');
+  var overlay  = document.getElementById('pw-overlay');
+  var studentId = idInput.value.trim().toUpperCase();
+  var password  = pwInput.value;
+
+  var matchedId = Object.keys(STUDENTS).find(function(k) {
+    return k.toUpperCase() === studentId;
+  });
+
+  if (matchedId && password === PASSWORD) {
+    var name = STUDENTS[matchedId];
+    localStorage.setItem('gamba_kounin_auth', 'ok');
+    localStorage.setItem('gamba_kounin_name', name);
+    errorDiv.style.display = 'none';
+    showWelcome(name);
+    overlay.style.transition = 'opacity 0.4s ease';
+    overlay.style.opacity = '0';
+    setTimeout(function() { overlay.style.display = 'none'; }, 400);
+  } else {
+    idInput.classList.add('error');
+    pwInput.classList.add('error');
+    errorDiv.style.display = 'block';
+    setTimeout(function() {
+      idInput.classList.remove('error');
+      pwInput.classList.remove('error');
+    }, 500);
+  }
+}
+</script>
+
+</body></html>
