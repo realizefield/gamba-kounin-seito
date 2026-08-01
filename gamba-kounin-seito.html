@@ -961,24 +961,23 @@ function sendNekoMessage() {
 }
 
 /* =====================================================
-   科目カードを viewer.html 経由で開くように変換
+   科目カードのリンクを直接コンテンツURLに変換
    ===================================================== */
 document.addEventListener('DOMContentLoaded', function() {
-  /* 準備中でないカードのリンクをすべて viewer.html 経由に変換 */
+  /* 準備中でないカードのhrefを直接コンテンツURLに書き換える */
   document.querySelectorAll('a.subject-card:not(.card-coming)').forEach(function(card) {
-    var url = card.getAttribute('href');
+    var rawHref = card.getAttribute('href');
     var btn = card.querySelector('.card-ask-btn');
-    if (!url || url === '#' || !btn) return;
+    if (!rawHref || rawHref === '#' || !btn) return;
 
-    var m = btn.getAttribute('onclick').match(/openNekoWithSubject\('([^']+)',\s*'([^']+)'\)/);
-    if (!m) return;
-    var subj = m[1], unt = m[2];
+    /* 既存の href が viewer.html?url=... や file://...?url=... 形式なら url パラメータだけ取り出す */
+    var urlParam = rawHref.match(/[?&]url=([^&]+)/);
+    var url = urlParam ? decodeURIComponent(urlParam[1]) : rawHref;
 
-    /* href を viewer.html に差し替え、新規タブをやめる */
-    card.href = 'viewer.html?url=' + encodeURIComponent(url) +
-      '&subject=' + encodeURIComponent(subj) +
-      '&unit=' + encodeURIComponent(unt);
-    card.removeAttribute('target');
+    /* 直接コンテンツURLを設定し、新しいタブで開く */
+    card.href = url;
+    card.setAttribute('target', '_blank');
+    card.setAttribute('rel', 'noopener noreferrer');
   });
 
   /* 「質問する」ボタンのクリックがカード遷移に伝播しないようにする */
