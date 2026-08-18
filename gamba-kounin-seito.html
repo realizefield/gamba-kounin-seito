@@ -734,22 +734,14 @@
 </div>
 
 <script>
-/* ===== 生徒マスタ（KOU2-2026-001形式） ===== */
-/* ↓ 実際の生徒名に書き換えてください。追加する場合は同じ形式で行を追加してください。 */
-var STUDENTS = {
-  'TEST': '野田',          /* テスト用アカウント（ID: test / PW: test） */
-  'KOU2-2026-001': '田中',
-  'KOU2-2026-002': '鈴木',
-  'KOU2-2026-003': '佐藤',
-  'KOU2-2026-004': '山田',
-  'KOU2-2026-005': '中村',
-  'KOU2-2026-006': '伊藤',
-  'KOU2-2026-007': '渡辺',
-  'KOU2-2026-008': '加藤',
-  /* 'KOU2-2026-009': '〇〇', ← このように追加できます */
-};
-var PASSWORD = 'gamba2026';
-var TEST_PASSWORD = 'test';  /* テスト用パスワード */
+/* ===== 会員マスターとの連携ログイン =====
+   以前は生徒IDを直接コードに書いていましたが、
+   今は会員マスター（スプレッドシート）に登録されているIDと
+   パスワードをGAS経由で確認する方式に変更しました。
+   KAK-から始まる外部生・NAI-から始まる内部生、どちらのIDも
+   このままログインできます。
+   ↓ GASをWebアプリとしてデプロイした後に取得したURLを貼り付けてください */
+var LOGIN_API_URL = 'https://script.google.com/macros/s/AKfycbyfGZKBj7T2YGOK_Y8BPSS2sAaVad9wQhkQ0wf0d0MHyeu9FHONIW1Yw8B2ZRJ8eXHh/exec';
 
 (function() {
   var auth = localStorage.getItem('gamba_kounin_auth');
@@ -1002,37 +994,74 @@ window.addEventListener('message', function(e) {
   }
 });
 
-/* ===== パスワード認証 ===== */
+/* ===== パスワード認証（会員マスターに問い合わせ） ===== */
 function checkPassword() {
   var idInput  = document.getElementById('id-input');
   var pwInput  = document.getElementById('pw-input');
   var errorDiv = document.getElementById('pw-error');
   var overlay  = document.getElementById('pw-overlay');
+  var btn      = document.getElementById('pw-btn');
   var studentId = idInput.value.trim().toUpperCase();
   var password  = pwInput.value;
 
-  var matchedId = Object.keys(STUDENTS).find(function(k) {
-    return k.toUpperCase() === studentId;
-  });
-
-  if (matchedId && (password === PASSWORD || (matchedId === 'TEST' && password === TEST_PASSWORD))) {
-    var name = STUDENTS[matchedId];
-    localStorage.setItem('gamba_kounin_auth', 'ok');
-    localStorage.setItem('gamba_kounin_name', name);
-    errorDiv.style.display = 'none';
-    showWelcome(name);
-    overlay.style.transition = 'opacity 0.4s ease';
-    overlay.style.opacity = '0';
-    setTimeout(function() { overlay.style.display = 'none'; }, 400);
-  } else {
-    idInput.classList.add('error');
-    pwInput.classList.add('error');
-    errorDiv.style.display = 'block';
-    setTimeout(function() {
-      idInput.classList.remove('error');
-      pwInput.classList.remove('error');
-    }, 500);
+  if (!studentId || !password) {
+    showLoginError('生徒IDとパスワードを入力してください。');
+    return;
   }
+
+  if (!LOGIN_API_URL || LOGIN_API_URL === 'ここにログイン確認用WebアプリのURLを入力') {
+    showLoginError('ログイン機能がまだ設定中です。野田先生にご連絡ください。');
+    return;
+  }
+
+  btn.disabled = true;
+  var originalBtnText = btn.textContent;
+  btn.textContent = '確認中…';
+
+  fetch(LOGIN_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'login', studentId: studentId, password: password })
+  })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      btn.disabled = false;
+      btn.textContent = originalBtnText;
+
+      if (data && data.success) {
+        var name = data.name || '';
+        localStorage.setItem('gamba_kounin_auth', 'ok');
+        localStorage.setItem('gamba_kounin_name', name);
+        localStorage.setItem('gamba_kounin_id', data.studentId || studentId);
+        errorDiv.style.display = 'none';
+        showWelcome(name);
+        overlay.style.transition = 'opacity 0.4s ease';
+        overlay.style.opacity = '0';
+        setTimeout(function() { overlay.style.display = 'none'; }, 400);
+      } else {
+        showLoginError((data && data.message) || 'IDまたはパスワードが違います。もう一度お試しください。');
+      }
+    })
+    .catch(function(err) {
+      btn.disabled = false;
+      btn.textContent = originalBtnText;
+      showLoginError('通信エラーが発生しました。しばらくしてからもう一度お試しください。');
+      console.error('ログインエラー:', err);
+    });
+}
+
+function showLoginError(message) {
+  var idInput  = document.getElementById('id-input');
+  var pwInput  = document.getElementById('pw-input');
+  var errorDiv = document.getElementById('pw-error');
+  errorDiv.textContent = message || 'IDまたはパスワードが違います。もう一度お試しください。';
+  errorDiv.style.display = 'block';
+  idInput.classList.add('error');
+  pwInput.classList.add('error');
+  setTimeout(function() {
+    idInput.classList.remove('error');
+    pwInput.classList.remove('error');
+  }, 500);
 }
 </script>
 
