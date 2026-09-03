@@ -33,6 +33,8 @@
     var p = location.pathname;
     var map = [
       ['kounin-math1', '高卒認定試験の数学'],
+      ['kounin-kagaku', '科学と人間生活'],
+      ['kagaku', '化学'],
       ['koumuin-keizaigaku', '公務員試験の経済学'],
       ['j-math', '中学数学'],
       ['j-english', '中学英文法'],
