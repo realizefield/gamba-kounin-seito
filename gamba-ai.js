@@ -46,6 +46,7 @@
       ['koukyou', '公共'],
       ['seibutukiso', '生物基礎'],
       ['business1', 'ビジネス関連科目'],
+      ['kounin-chiri', '高卒認定試験の地理'],
     ];
     for (var i = 0; i < map.length; i++) {
       if (p.indexOf('/' + map[i][0] + '/') === 0 || p.indexOf('/' + map[i][0] + '/') > -1) return map[i][1];
