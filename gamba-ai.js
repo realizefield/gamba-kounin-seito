@@ -46,6 +46,7 @@
       ['rekishisougou', '歴史総合'],
       ['koukyou', '公共'],
       ['seibutukiso', '生物基礎'],
+      ['kounin-joho', '高卒認定試験の情報'],
       ['business1', 'ビジネス関連科目'],
     ];
     for (var i = 0; i < map.length; i++) {
