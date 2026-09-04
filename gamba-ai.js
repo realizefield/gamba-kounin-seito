@@ -34,6 +34,7 @@
     var map = [
       ['kounin-math1', '高卒認定試験の数学'],
       ['kounin-kagaku', '科学と人間生活'],
+      ['kounin-chiri', '高卒認定試験の地理'],
       ['kagaku', '化学'],
       ['koumuin-keizaigaku', '公務員試験の経済学'],
       ['j-math', '中学数学'],
@@ -46,7 +47,6 @@
       ['koukyou', '公共'],
       ['seibutukiso', '生物基礎'],
       ['business1', 'ビジネス関連科目'],
-      ['kounin-chiri', '高卒認定試験の地理'],
     ];
     for (var i = 0; i < map.length; i++) {
       if (p.indexOf('/' + map[i][0] + '/') === 0 || p.indexOf('/' + map[i][0] + '/') > -1) return map[i][1];
