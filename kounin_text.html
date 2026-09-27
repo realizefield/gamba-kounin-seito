@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>江原予備校　高認生テキスト</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@700&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+/*
+ * ================================================================
+ * 江原予備校「高認生テキスト」PDF閲覧・印刷ページ
+ * gamba-text/gambatext.html（中学生テキスト版）と同じデザイン・
+ * 仕組みを流用し、高認GAMBA向けに作成。
+ * ================================================================
+ */
+
+/* === Design Tokens === */
+:root {
+  --bg:          #F7F5F0;
+  --surface:     #FFFFFF;
+  --surface-2:   #EEEBE4;
+  --border:      #D5D0C8;
+  --text:        #1C1A17;
+  --text-muted:  #5C5752;
+  --navy:        #1A3A6B;
+  --navy-light:  #EEF2F8;
+  --orange:      #E8650A;
+  --gold:        #F7B733;
+
+  --g1-color: #0D7C6B;
+  --g1-bg:    #E6F5F2;
+  --g2-color: #5B3FA6;
+  --g2-bg:    #F0EBFF;
+  --g3-color: #B83025;
+  --g3-bg:    #FAECEA;
+
+  --radius-sm: 8px;
+  --radius:    12px;
+  --focus:     3px solid var(--orange);
+
+  --font-body:  'Noto Sans JP', 'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif;
+  --font-serif: 'Noto Serif JP', 'Hiragino Mincho Pro', 'Yu Mincho', serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:         #0E1824;
+    --surface:    #182436;
+    --surface-2:  #1F2E44;
+    --border:     #2C3F58;
+    --text:       #EEE9E2;
+    --text-muted: #8A8FA0;
+    --navy-light: #182436;
+    --g1-bg:      #0A2520;
+    --g2-bg:      #1A1238;
+    --g3-bg:      #2A0D0A;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:         #0E1824;
+  --surface:    #182436;
+  --surface-2:  #1F2E44;
+  --border:     #2C3F58;
+  --text:       #EEE9E2;
+  --text-muted: #8A8FA0;
+  --navy-light: #182436;
+  --g1-bg:      #0A2520;
+  --g2-bg:      #1A1238;
+  --g3-bg:      #2A0D0A;
+}
+
+/* === Reset === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* === Base === */
+body {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.85;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-text-size-adjust: 100%;
+}
+
+/* === Skip Link === */
+.skip-link {
+  position: absolute;
+  top: -200%;
+  left: 16px;
+  z-index: 2000;
+  background: var(--orange);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 12px 24px;
+  border-radius: 0 0 8px 8px;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+}
+.skip-link:focus {
+  top: 0;
+  outline: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+:focus-visible {
+  outline: var(--focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* === ヘッダー === */
+header {
+  background: var(--navy);
+  color: #fff;
+  padding: 36px 24px 30px;
+  text-align: center;
+}
+.header-school {
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 8px;
+}
+.header-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  text-wrap: balance;
+  margin-bottom: 10px;
+}
+.header-desc {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.72);
+  letter-spacing: 0.08em;
+}
+
+/* === カテゴリタブナビ === */
+.grade-nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.09);
+}
+.grade-tabs {
+  display: flex;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 12px;
+}
+.grade-tab {
+  flex: 1;
+  padding: 18px 10px 16px;
+  background: none;
+  border: none;
+  border-bottom: 4px solid transparent;
+  margin-bottom: -2px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  transition: color 0.18s, border-color 0.18s;
+  position: relative;
+}
+.grade-tab:hover { color: var(--text); }
+.grade-tab[aria-selected="true"] { color: var(--text); }
+.grade-tab.g1[aria-selected="true"] { border-bottom-color: var(--g1-color); color: var(--g1-color); }
+.grade-tab.g2[aria-selected="true"] { border-bottom-color: var(--g2-color); color: var(--g2-color); }
+.grade-tab.g3[aria-selected="true"] { border-bottom-color: var(--g3-color); color: var(--g3-color); }
+
+/* === メインコンテンツ === */
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 44px 20px 80px;
+}
+
+.grade-panel { display: none; }
+.grade-panel.active { display: block; }
+
+.grade-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 36px;
+  padding: 20px 24px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+}
+.g1 .grade-heading { background: var(--g1-bg); border-color: var(--g1-color); }
+.g2 .grade-heading { background: var(--g2-bg); border-color: var(--g2-color); }
+.g3 .grade-heading { background: var(--g3-bg); border-color: var(--g3-color); }
+
+.grade-badge {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+  letter-spacing: -0.02em;
+}
+.g1 .grade-badge { background: var(--g1-color); }
+.g2 .grade-badge { background: var(--g2-color); }
+.g3 .grade-badge { background: var(--g3-color); }
+
+.grade-heading-text h2 {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-wrap: balance;
+}
+.grade-heading-text .grade-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+  letter-spacing: 0.06em;
+}
+
+.subject-section { margin-bottom: 40px; }
+.subject-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 2px solid var(--border);
+}
+.subject-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+.subj-eigo .subject-icon    { background: #E8F4FD; }
+.subj-tango .subject-icon   { background: #F0EBFF; }
+.subj-rekishi .subject-icon { background: #FAECEA; }
+
+.subject-label {
+  font-size: 1.08rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text);
+}
+.subject-count {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+.subject-note {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  line-height: 1.8;
+}
+
+/* === PDFリスト === */
+.pdf-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pdf-item {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+.pdf-item.available { border-left: 5px solid var(--orange); }
+.pdf-item.available:hover {
+  border-color: var(--orange);
+  box-shadow: 0 3px 16px rgba(232,101,10,0.10);
+}
+
+.pdf-title {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.55;
+  min-width: 0;
+}
+.pdf-tag-new {
+  display: inline-block;
+  font-size: 0.6rem;
+  background: var(--orange);
+  color: #fff;
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  vertical-align: middle;
+  margin-left: 8px;
+  line-height: 1.6;
+}
+
+/* === ボタン === */
+.pdf-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 20px;
+  min-height: 48px;
+  min-width: 88px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s, transform 0.1s;
+  text-decoration: none;
+  line-height: 1;
+}
+.btn:hover   { opacity: 0.86; }
+.btn:active  { transform: scale(0.96); }
+.btn-view    { background: var(--navy); color: #fff; }
+.btn-print   { background: var(--orange); color: #fff; }
+.btn svg     { flex-shrink: 0; }
+
+@media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+
+/* === レスポンシブ === */
+@media (max-width: 580px) {
+  body { font-size: 17px; }
+  .pdf-item { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .pdf-actions { width: 100%; }
+  .btn { flex: 1; }
+  .grade-tab { font-size: 0.92rem; padding: 16px 6px 14px; }
+  .grade-heading { padding: 16px 18px; }
+  main { padding: 32px 16px 60px; }
+}
+
+/* === フッター === */
+footer {
+  text-align: center;
+  padding: 28px 16px;
+  border-top: 1.5px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 2;
+  letter-spacing: 0.04em;
+}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">メインコンテンツへスキップ</a>
+
+<!-- ===== ヘッダー ===== -->
+<header>
+  <div class="header-school">江原予備校</div>
+  <h1 class="header-title">高認生テキスト</h1>
+  <div class="header-desc">各テキストをPDFで閲覧・印刷できます</div>
+</header>
+
+<!-- ===== カテゴリタブ ===== -->
+<nav class="grade-nav" aria-label="カテゴリを選択">
+  <div class="grade-tabs" role="tablist" aria-label="カテゴリ">
+    <button class="grade-tab g1" role="tab" id="tab-g1" aria-selected="true" aria-controls="panel-g1" onclick="selectGrade('g1')">中学英語</button>
+    <button class="grade-tab g2" role="tab" id="tab-g2" aria-selected="false" aria-controls="panel-g2" onclick="selectGrade('g2')">高認英単語</button>
+    <button class="grade-tab g3" role="tab" id="tab-g3" aria-selected="false" aria-controls="panel-g3" onclick="selectGrade('g3')">歴史総合</button>
+  </div>
+</nav>
+
+<!-- ===== メイン ===== -->
+<main id="main">
+
+  <!-- ============================================================
+       中学英語（英語基礎の土台固め）
+  ============================================================ -->
+  <div class="grade-panel g1 active" id="panel-g1" role="tabpanel" aria-labelledby="tab-g1" tabindex="-1">
+    <div class="grade-heading">
+      <div class="grade-badge" aria-hidden="true">中</div>
+      <div class="grade-heading-text">
+        <h2>中学英語</h2>
+        <div class="grade-sub">高認英語（英語基礎）の土台となる中学文法テキスト</div>
+      </div>
+    </div>
+
+    <section class="subject-section subj-eigo" aria-labelledby="g1-eigo-label">
+      <div class="subject-header">
+        <div class="subject-icon" aria-hidden="true">🔤</div>
+        <span class="subject-label" id="g1-eigo-label">英語</span>
+        <span class="subject-count">5件</span>
+      </div>
+      <ul class="pdf-list" aria-label="中学英語のテキスト">
+        <li class="pdf-item available">
+          <span class="pdf-title">第１章 be動詞<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-text/eng-chu1-01-bedoshi.pdf')" aria-label="be動詞のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-text/eng-chu1-01-bedoshi.pdf')" aria-label="be動詞のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">第２章 一般動詞<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-text/eng-chu1-02-ippandoshi.pdf')" aria-label="一般動詞のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-text/eng-chu1-02-ippandoshi.pdf')" aria-label="一般動詞のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">第１章 基本（there構文・過去形）<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-text/eng-chu2-01-there-kako.pdf')" aria-label="there構文・過去形のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-text/eng-chu2-01-there-kako.pdf')" aria-label="there構文・過去形のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">第２章 過去形・助動詞・比較・不定詞<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-text/eng-chu2-02-jodoushi-hikaku.pdf')" aria-label="過去形・助動詞・比較・不定詞のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-text/eng-chu2-02-jodoushi-hikaku.pdf')" aria-label="過去形・助動詞・比較・不定詞のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">中３復習 英語（全ページ）<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-text/eng-chu3-all.pdf')" aria-label="中３復習英語のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-text/eng-chu3-all.pdf')" aria-label="中３復習英語のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </div><!-- /g1 -->
+
+  <!-- ============================================================
+       高認英単語
+  ============================================================ -->
+  <div class="grade-panel g2" id="panel-g2" role="tabpanel" aria-labelledby="tab-g2" tabindex="-1">
+    <div class="grade-heading">
+      <div class="grade-badge" aria-hidden="true">語</div>
+      <div class="grade-heading-text">
+        <h2>高認英単語</h2>
+        <div class="grade-sub">全20カテゴリ・書き取り練習＋確認テスト＋解答</div>
+      </div>
+    </div>
+
+    <section class="subject-section subj-tango" aria-labelledby="g2-tango-label">
+      <div class="subject-header">
+        <div class="subject-icon" aria-hidden="true">📗</div>
+        <span class="subject-label" id="g2-tango-label">英単語</span>
+        <span class="subject-count">20件</span>
+      </div>
+      <div class="subject-note">各PDFは「表紙＋書き取り練習＋確認テスト＋解答」の4ページ構成です。</div>
+      <ul class="pdf-list" aria-label="高認英単語のテキスト">
+        <li class="pdf-item available">
+          <span class="pdf-title">01　動詞：達成・獲得<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_01.pdf')" aria-label="動詞：達成・獲得のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_01.pdf')" aria-label="動詞：達成・獲得のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">02　動詞：影響・変化<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_02.pdf')" aria-label="動詞：影響・変化のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_02.pdf')" aria-label="動詞：影響・変化のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">03　動詞：思考・判断<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_03.pdf')" aria-label="動詞：思考・判断のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_03.pdf')" aria-label="動詞：思考・判断のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">04　動詞：社会・行動<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_04.pdf')" aria-label="動詞：社会・行動のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_04.pdf')" aria-label="動詞：社会・行動のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">05　動詞：認知・情報<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_05.pdf')" aria-label="動詞：認知・情報のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_05.pdf')" aria-label="動詞：認知・情報のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">06　動詞：支援・変革<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_06.pdf')" aria-label="動詞：支援・変革のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_06.pdf')" aria-label="動詞：支援・変革のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">07　動詞：困難・対処<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_07.pdf')" aria-label="動詞：困難・対処のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_07.pdf')" aria-label="動詞：困難・対処のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">08　動詞：その他重要<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_08.pdf')" aria-label="動詞：その他重要のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_08.pdf')" aria-label="動詞：その他重要のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">09　名詞：社会・問題<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_09.pdf')" aria-label="名詞：社会・問題のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_09.pdf')" aria-label="名詞：社会・問題のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">10　名詞：環境・科学<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_10.pdf')" aria-label="名詞：環境・科学のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_10.pdf')" aria-label="名詞：環境・科学のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">11　名詞：経済・政治<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_11.pdf')" aria-label="名詞：経済・政治のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_11.pdf')" aria-label="名詞：経済・政治のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">12　名詞：思想・価値<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_12.pdf')" aria-label="名詞：思想・価値のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_12.pdf')" aria-label="名詞：思想・価値のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">13　名詞：組織・構造<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_13.pdf')" aria-label="名詞：組織・構造のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_13.pdf')" aria-label="名詞：組織・構造のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">14　名詞：学問・知識<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_14.pdf')" aria-label="名詞：学問・知識のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_14.pdf')" aria-label="名詞：学問・知識のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">15　名詞：人間・感情<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_15.pdf')" aria-label="名詞：人間・感情のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_15.pdf')" aria-label="名詞：人間・感情のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">16　名詞：抽象・概念<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_16.pdf')" aria-label="名詞：抽象・概念のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_16.pdf')" aria-label="名詞：抽象・概念のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">17　形容詞：重要①<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_17.pdf')" aria-label="形容詞：重要①のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_17.pdf')" aria-label="形容詞：重要①のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">18　形容詞：重要②<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_18.pdf')" aria-label="形容詞：重要②のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_18.pdf')" aria-label="形容詞：重要②のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">19　形容詞：状態・性質<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_19.pdf')" aria-label="形容詞：状態・性質のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_19.pdf')" aria-label="形容詞：状態・性質のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">20　副詞・接続表現<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_20.pdf')" aria-label="副詞・接続表現のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/kounin_english_word/pdf/HS_20.pdf')" aria-label="副詞・接続表現のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </div><!-- /g2 -->
+  <!-- ============================================================
+       歴史総合
+  ============================================================ -->
+  <div class="grade-panel g3" id="panel-g3" role="tabpanel" aria-labelledby="tab-g3" tabindex="-1">
+    <div class="grade-heading">
+      <div class="grade-badge" aria-hidden="true">史</div>
+      <div class="grade-heading-text">
+        <h2>歴史総合</h2>
+        <div class="grade-sub">近世〜近代の世界史・日本史　練習問題付きテキスト</div>
+      </div>
+    </div>
+
+    <section class="subject-section subj-rekishi" aria-labelledby="g3-rekishi-label">
+      <div class="subject-header">
+        <div class="subject-icon" aria-hidden="true">📜</div>
+        <span class="subject-label" id="g3-rekishi-label">歴史総合</span>
+        <span class="subject-count">14件</span>
+      </div>
+      <ul class="pdf-list" aria-label="歴史総合のテキスト">
+        <li class="pdf-item available">
+          <span class="pdf-title">① イスラーム帝国・明清<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi01-islam-minshin.pdf')" aria-label="イスラーム帝国・明清のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi01-islam-minshin.pdf')" aria-label="イスラーム帝国・明清のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">② ヨーロッパ主権国家体制の成立<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi02-europe-shukokka.pdf')" aria-label="ヨーロッパ主権国家体制の成立のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi02-europe-shukokka.pdf')" aria-label="ヨーロッパ主権国家体制の成立のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">③ 科学革命と宗教改革<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi03-kagakukakumei-shukyokaikaku.pdf')" aria-label="科学革命と宗教改革のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi03-kagakukakumei-shukyokaikaku.pdf')" aria-label="科学革命と宗教改革のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">④ 産業革命・ドイツ／イタリアの統一・南北戦争<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi04-sangyokakumei-doitsu-itaria.pdf')" aria-label="産業革命・ドイツ／イタリアの統一・南北戦争のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi04-sangyokakumei-doitsu-itaria.pdf')" aria-label="産業革命・ドイツ／イタリアの統一・南北戦争のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">⑤ 19世紀のアジア諸国の変容<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi05-19seiki-asia.pdf')" aria-label="19世紀のアジア諸国の変容のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi05-19seiki-asia.pdf')" aria-label="19世紀のアジア諸国の変容のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">⑥ 中国の開港とその後<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi06-chugoku-kaiko.pdf')" aria-label="中国の開港とその後のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi06-chugoku-kaiko.pdf')" aria-label="中国の開港とその後のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">⑦ 日本の開国とその影響<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi07-nihon-kaikoku.pdf')" aria-label="日本の開国とその影響のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi07-nihon-kaikoku.pdf')" aria-label="日本の開国とその影響のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">⑧ 日本の近代化と東アジアの国際秩序<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi08-nihon-kindaika.pdf')" aria-label="日本の近代化と東アジアの国際秩序のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi08-nihon-kindaika.pdf')" aria-label="日本の近代化と東アジアの国際秩序のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">⑨ アジア外交と自由民権運動<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi09-asia-gaiko-jiyuminken.pdf')" aria-label="アジア外交と自由民権運動のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi09-asia-gaiko-jiyuminken.pdf')" aria-label="アジア外交と自由民権運動のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">⑩ 日清日露戦争・帝国主義<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi10-nisshin-nichiro.pdf')" aria-label="日清日露戦争・帝国主義のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi10-nisshin-nichiro.pdf')" aria-label="日清日露戦争・帝国主義のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">⑪ 日露戦争後のアジア<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi11-nichirosengo-asia.pdf')" aria-label="日露戦争後のアジアのPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi11-nichirosengo-asia.pdf')" aria-label="日露戦争後のアジアのPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">⑫ 第一次大戦<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi12-dai1ji-taisen.pdf')" aria-label="第一次大戦のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi12-dai1ji-taisen.pdf')" aria-label="第一次大戦のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">⑬ 第二次大戦<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi13-dai2ji-taisen.pdf')" aria-label="第二次大戦のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi13-dai2ji-taisen.pdf')" aria-label="第二次大戦のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+        <li class="pdf-item available">
+          <span class="pdf-title">⑭ 第二次大戦後<span class="pdf-tag-new" aria-label="新着">NEW</span></span>
+          <div class="pdf-actions">
+            <button class="btn btn-view" onclick="viewPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi14-dai2ji-taisengo.pdf')" aria-label="第二次大戦後のPDFを新しいタブで開く"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C5 3 2.7 5.3 2 8c.7 2.7 3 5 6 5s5.3-2.3 6-5c-.7-2.7-3-5-6-5Zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm0-4.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="currentColor"/></svg>閲覧</button>
+            <button class="btn btn-print" onclick="printPdf('https://realizefield.github.io/gamba-kounin-seito/pdf/rekishi14-dai2ji-taisengo.pdf')" aria-label="第二次大戦後のPDFを印刷する"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2h8v3H4V2Zm-1 4h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Zm1 5h8v2H4v-2Zm7-4a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" fill="currentColor"/></svg>印刷</button>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </div><!-- /g3 -->
+
+</main>
+
+<footer>
+  © 江原予備校 / 株式会社 アイラコーポレーション<br>
+  〒862-0950 熊本市中央区水前寺3丁目1-3<br>
+  TEL：096-382-6761
+</footer>
+
+<script>
+  function selectGrade(grade) {
+    document.querySelectorAll('.grade-tab').forEach(function(tab) {
+      var isSelected = tab.classList.contains(grade);
+      tab.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+    });
+    document.querySelectorAll('.grade-panel').forEach(function(panel) {
+      var isActive = panel.classList.contains(grade);
+      panel.classList.toggle('active', isActive);
+    });
+    var panel = document.getElementById('panel-' + grade);
+    if (panel) { panel.focus(); }
+  }
+
+  var tabs = document.querySelectorAll('.grade-tab');
+  tabs.forEach(function(tab, i) {
+    tab.addEventListener('keydown', function(e) {
+      var target;
+      if (e.key === 'ArrowRight') target = tabs[(i + 1) % tabs.length];
+      if (e.key === 'ArrowLeft')  target = tabs[(i - 1 + tabs.length) % tabs.length];
+      if (e.key === 'Home')       target = tabs[0];
+      if (e.key === 'End')        target = tabs[tabs.length - 1];
+      if (target) {
+        e.preventDefault();
+        target.focus();
+        target.click();
+      }
+    });
+  });
+
+  function viewPdf(url) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  function printPdf(url) {
+    var win = window.open(url, '_blank', 'noopener,noreferrer');
+    if (win) {
+      win.addEventListener('load', function() {
+        try {
+          win.focus();
+          win.print();
+        } catch (err) {}
+      });
+    }
+  }
+</script>
+
+</body></html>

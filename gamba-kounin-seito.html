@@ -115,6 +115,31 @@
   .card-coming { opacity: 0.65; pointer-events: none; cursor: default; }
   .coming-badge { display: inline-block; background: #bbb; color: white; font-size: 0.6rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-left: 6px; vertical-align: middle; }
 
+  /* ===== テキストPDFパネル ===== */
+  .tpdf-panel-wrap { background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.07); margin-bottom: 48px; }
+  .tpdf-panel-head { background: var(--navy); color: white; padding: 20px 24px; display: flex; align-items: center; gap: 14px; }
+  .tpdf-panel-icon { font-size: 2rem; flex-shrink: 0; }
+  .tpdf-panel-title { font-size: 1rem; font-weight: 700; margin-bottom: 3px; }
+  .tpdf-panel-sub { font-size: 0.75rem; color: rgba(255,255,255,0.75); }
+  .tpdf-grades-row { display: flex; gap: 0; border-bottom: 1px solid #f0f0f0; }
+  .tpdf-grade-card { flex: 1; padding: 16px 18px; border-right: 1px solid #f0f0f0; }
+  .tpdf-grade-card:last-child { border-right: none; }
+  .tpdf-grade-label { font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 12px; display: inline-block; margin-bottom: 8px; }
+  .tg1 .tpdf-grade-label { background: #E6F5F2; color: #0D7C6B; }
+  .tg2 .tpdf-grade-label { background: #F0EBFF; color: #5B3FA6; }
+  .tg3 .tpdf-grade-label { background: #FAECEA; color: #B83025; }
+  .tpdf-subj-list { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tpdf-subj-tag { font-size: 0.63rem; padding: 2px 8px; border-radius: 8px; font-weight: 500; }
+  .tg1 .tpdf-subj-tag { background: #E6F5F2; color: #0D7C6B; }
+  .tg2 .tpdf-subj-tag { background: #F0EBFF; color: #5B3FA6; }
+  .tg3 .tpdf-subj-tag { background: #FAECEA; color: #B83025; }
+  .tpdf-pdf-counts { font-size: 0.65rem; color: var(--muted, #777); margin-top: 6px; }
+  .tpdf-footer { padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; background: #fafaf8; }
+  .tpdf-footer-note { font-size: 0.72rem; color: var(--muted, #777); line-height: 1.6; }
+  .tpdf-open-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--orange); color: white; font-weight: 700; font-size: 0.82rem; padding: 10px 22px; border-radius: 24px; text-decoration: none; letter-spacing: 0.06em; transition: opacity 0.2s; white-space: nowrap; }
+  .tpdf-open-btn:hover { opacity: 0.85; }
+  @media(max-width:560px){ .tpdf-grades-row { flex-direction: column; } .tpdf-grade-card { border-right: none; border-bottom: 1px solid #f0f0f0; } .tpdf-grade-card:last-child { border-bottom: none; } }
+
   /* ===== フロー ===== */
   .flow-wrap { background: var(--white); border-radius: var(--radius); padding: 28px 24px; margin-bottom: 48px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
   .flow-steps { display: flex; align-items: stretch; gap: 0; flex-wrap: wrap; justify-content: center; }
@@ -469,6 +494,50 @@
       <div class="card-footer-link">コンテンツを見る <span>→</span></div>
     </a>
 
+  </div>
+
+  <!-- ===== テキストPDFパネル ===== -->
+  <div class="section-title">テキストPDF（江原予備校オリジナル教材）</div>
+  <div class="tpdf-panel-wrap">
+    <div class="tpdf-panel-head">
+      <div class="tpdf-panel-icon">📄</div>
+      <div>
+        <div class="tpdf-panel-title">江原予備校　高認生テキスト</div>
+        <div class="tpdf-panel-sub">中学英語・高認英単語・歴史総合 ／ PDF閲覧・印刷対応</div>
+      </div>
+    </div>
+    <div class="tpdf-grades-row">
+      <div class="tpdf-grade-card tg1">
+        <div class="tpdf-grade-label">中学英語</div>
+        <div class="tpdf-subj-list">
+          <span class="tpdf-subj-tag">🔤 英語基礎の土台固め</span>
+        </div>
+        <div class="tpdf-pdf-counts">文法テキスト5件</div>
+      </div>
+      <div class="tpdf-grade-card tg2">
+        <div class="tpdf-grade-label">高認英単語</div>
+        <div class="tpdf-subj-list">
+          <span class="tpdf-subj-tag">📗 書き取り練習＋確認テスト</span>
+        </div>
+        <div class="tpdf-pdf-counts">全20カテゴリ</div>
+      </div>
+      <div class="tpdf-grade-card tg3">
+        <div class="tpdf-grade-label">歴史総合</div>
+        <div class="tpdf-subj-list">
+          <span class="tpdf-subj-tag">📜 近世〜近代・世界史＆日本史</span>
+        </div>
+        <div class="tpdf-pdf-counts">練習問題付きテキスト14件</div>
+      </div>
+    </div>
+    <div class="tpdf-footer">
+      <div class="tpdf-footer-note">
+        閲覧・印刷ボタンで各テキストをすぐに開けます。<br>
+        スマホ・タブレット・PCすべてに対応しています。
+      </div>
+      <a class="tpdf-open-btn" href="https://realizefield.github.io/gamba-kounin-seito/kounin_text.html" target="_blank">
+        📄 テキストPDFを開く →
+      </a>
+    </div>
   </div>
 
   <!-- ===== 特長 ===== -->
